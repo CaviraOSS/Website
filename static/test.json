@@ -1,0 +1,103 @@
+[
+	{
+		"label": "Get started",
+		"items": [
+			{
+				"text": "Preface",
+				"type": "render",
+				"file": "First"
+			},
+			{
+				"text": "Introduction",
+				"href": "introduction",
+				"type": "text",
+				"data": [
+					{
+						"heading": "Introduction to LongMemory",
+						"paragraphs": [
+							"LongMemory is a local-first, cognitive memory engine for AI agents. It features temporal knowledge graphs, multi-sector embeddings, and adaptive decay.",
+							"LongMemory is a production-ready long-term memory system designed specifically for AI agents and conversational systems. It implements the HMD v2 (Holistic Memory Descriptor v2) specification with advanced features like multi-sector embeddings, time-based decay, and graph-based waypoints."
+						]
+					},
+					{
+						"heading": "Why LongMemory?",
+						"paragraphs": [
+							"LongMemory is the ideal solution for AI agents that need to maintain a persistent, contextual understanding of their environment and interactions over time.",
+							"Most 'memory' solutions are just vector databases wrapped in a Python script. OpenMemory is different. It is a Cognitive Engine."
+						],
+						"subitems": [
+							{
+								"heading": "The problem",
+								"paragraphs": [
+									"LongMemory is the ideal solution for AI agents that need to maintain a persistent, contextual understanding of their environment and interactions over time.",
+									"Most 'memory' solutions are just vector databases wrapped in a Python script. OpenMemory is different. It is a Cognitive Engine."
+								]
+							}
+						]
+					}
+				]
+			},
+			{
+				"text": "Purpose",
+				"href": "purpose"
+			},
+			{
+				"text": "Key concepts",
+				"href": "concepts"
+			},
+			{
+				"text": "Standalone vs Server",
+				"href": "standalone-vs-server"
+			}
+		]
+	},
+	{
+		"label": "Installation",
+		"items": [
+			{
+				"text": "Install Guide",
+				"href": "install",
+				"data": [
+					{
+						"heading": "Standalone mode",
+						"paragraphs": [
+							"Run as a library in your app, best for local agents, CLI tools, and single-user applications."
+						],
+						"subitems": [
+							{
+								"heading": "JavaScript/TypeScript",
+								"paragraphs": [
+									"Install the package via npm or yarn.",
+									{
+										"type": "command",
+										"lang": "bash",
+										"data": "npm install openmemory-js"
+									}
+								]
+							},
+							{
+								"heading": "JavaScript/TypeScript",
+								"paragraphs": [
+									"Install the package via npm or yarn.",
+									{
+										"type": "command",
+										"lang": "bash",
+										"data": "npm install openmemory-js"
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			{
+				"text": "Quick start (Standalone)",
+				"href": "quickstart"
+			},
+			{
+				"text": "Quick start (Server)",
+				"href": "quickstart-server"
+			}
+		]
+	}
+]
