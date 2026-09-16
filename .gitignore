@@ -1,0 +1,7 @@
+node_modules
+.svelte-kit
+.env
+package-lock.json
+
+!.gitignore
+!.vscode
