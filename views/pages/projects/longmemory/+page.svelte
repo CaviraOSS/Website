@@ -322,8 +322,8 @@
 		</div>
 
 		<main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-28 sm:py-36 lg:py-56 text-center">
-			<h1 class="text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-white max-w-4xl leading-1.5 text-balance mt-6">Memory that feels handcrafted for AI agents.</h1>
-			<p class="mt-6 text-base sm:text-lg text-zinc-300 max-w-3xl font-normal leading-relaxed text-balance">Longmemory treats conversations as continuous biological systems—anchoring emotion, contextual drift, and temporal decay with zero synthetic latency.</p>
+			<h1 class="text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-white max-w-4xl leading-1.5 text-balance mt-6">Durable, temporal, governed memory for AI agents.</h1>
+			<p class="mt-6 text-base sm:text-lg text-zinc-300 max-w-3xl font-normal leading-relaxed text-balance">Longmemory is a local-first, self-hosted memory engine for LLM applications — not just a vector store. It tracks what's true now, what used to be true, and why, across four distinct recall modes.</p>
 			<div class="mt-10 flex flex-wrap items-center justify-center gap-4">
 				<button class="group relative px-6 py-2.5 rounded-full bg-zinc-100 hover:opacity-60 text-black text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-[0_0_25px_rgba(255,255,255,0.12)] active:scale-95">
 					<span>Initialize Memory</span>
@@ -349,11 +349,11 @@
 						{@html icons.get("watch", "size-8")}
 						<div class="flex flex-col items-end">
 							<span class="text-xs text-zinc-400">[ <span class="text-zinc-200">01</span> ]</span>
-							<span class="text-xs text-zinc-400">[ DYNAMIC ]</span>
+							<span class="text-xs text-zinc-400">[ IMMUTABLE ]</span>
 						</div>
 					</div>
-					<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Intelligent decay orchestration</h1>
-					<p class="text-zinc-400">Memories decay gracefully along custom curves, while high-signal events trigger <span class="text-zinc-100">reinforcement without manual tuning</span>.</p>
+					<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Hydrograph substrate</h1>
+					<p class="text-zinc-400">Every write lands as an immutable node with <span class="text-zinc-100">executable edges, worlds, and entities</span>, not a flat row in a vector index.</p>
 				</div>
 				<img src="/assets/images/x1.png" alt="" class="object-cover w-full h-full absolute top-28 rotate-6 left-0 bottom-0 z-0 scale-105" />
 				<div class="absolute bottom-0 h-20 w-full bg-gradient-to-t from-black z-10 hidden"></div>
@@ -369,14 +369,14 @@
 								<span class="text-xs text-zinc-400 uppercase">[ context ]</span>
 							</div>
 						</div>
-						<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Waypoints & graph routing</h1>
-						<p class="text-zinc-400">Every memory anchors to a dynamic waypoint graph, powering contextual recall and multi-hop reasoning.</p>
+						<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Four recall modes, one engine</h1>
+						<p class="text-zinc-400">Strict, historical, associative, and world-grounded recall run against the same substrate, so each query gets the retrieval contract it actually needs.</p>
 					</div>
 					<div class="relative w-full overflow-hidden">
 						<div class="w-[85%] mt-4 mx-auto bg-stone-800 h-px"></div>
 						<div class="mt-24 px-8 flex flex-col">
-							<span class="font-medium"> Please use your imagination to visualize an image related to the text above. </span>
-							<span class="text-zinc-400 mt-8"> The project maintainer is too broke to afford me to create an image for this, he owes me around $40 from our last collaboration. On top of that, he even said my designs don't fit his 'expectations'. </span>
+							<span class="font-medium"> Strict recall applies temporal, contradiction, and confidence gates for answers you can act on. </span>
+							<span class="text-zinc-400 mt-8"> Historical and world-grounded recall preserve superseded truth and verify against current external evidence, while associative recall follows semantic, lexical, and graph signals across sessions. </span>
 						</div>
 					</div>
 				</div>
@@ -391,8 +391,8 @@
 									<span class="text-xs text-zinc-400 uppercase">[ ingestion ]</span>
 								</div>
 							</div>
-							<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Multimodal pipelines</h1>
-							<p class="text-zinc-400">Stream documents, call transcripts, and events through adaptive chunking with automatic context stitching.</p>
+							<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Session porter & connectors</h1>
+							<p class="text-zinc-400">Import history straight from coding agents and chat tools, then keep ingesting documents and events through the same pipeline.</p>
 						</div>
 					</div>
 					<div class="w-full h-full border-l border-y border-stone-900 relative overflow-hidden">
@@ -404,8 +404,8 @@
 									<span class="text-xs text-zinc-400 uppercase">[ knowledge ]</span>
 								</div>
 							</div>
-							<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Knowledge management</h1>
-							<p class="text-zinc-400">Convert knowledge bases into living graphs the moment documents land, unlocking razor-sharp semantic discovery.</p>
+							<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Project memory & governed assets</h1>
+							<p class="text-zinc-400">Give coding and workflow agents durable project memory, with governed assets that stay consistent across every session.</p>
 						</div>
 					</div>
 					<div class="w-full h-full border-l border-t border-stone-900 border-b-0 relative overflow-hidden row-span-2">
@@ -417,8 +417,8 @@
 									<span class="text-xs text-zinc-400 uppercase">[ providers ]</span>
 								</div>
 							</div>
-							<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Modular embedding engines</h1>
-							<p class="text-zinc-400">Swap between OpenAI, Gemini, Voyage, or local models without rewriting your pipeline.</p>
+							<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Eight embedding providers</h1>
+							<p class="text-zinc-400">Swap between OpenAI, Gemini, NVIDIA NIM, AWS Bedrock, Ollama, or a local HTTP endpoint without rewriting your pipeline.</p>
 						</div>
 						<div class="relative w-full h-full overflow-hidden">
 							<img src="/assets/images/x6.png" alt="" class="object-cover w-full h-full object-center absolute top-0 -mt-28 inset-0 z-0 rotate-6 opacity-60" />
@@ -433,11 +433,11 @@
 							{@html icons.get("layers", "size-8")}
 							<div class="flex flex-col items-end">
 								<span class="text-xs text-zinc-400">[ <span class="text-zinc-200">04</span> ]</span>
-								<span class="text-xs text-zinc-400 uppercase">[ performance ]</span>
+								<span class="text-xs text-zinc-400 uppercase">[ storage ]</span>
 							</div>
 						</div>
-						<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Cold-start free retrieval</h1>
-						<p class="text-zinc-400">SQLite vector search with RAM caching gives you <span class="text-zinc-100">sub-40ms</span> responses without managing manually managing an infrastructure.</p>
+						<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Local-first, durable storage</h1>
+						<p class="text-zinc-400">SQLite keeps nodes, edges, worlds, and temporal history on disk, so recall survives restarts <span class="text-zinc-100">without a separate database service</span>.</p>
 					</div>
 				</div>
 			</div>
@@ -448,11 +448,11 @@
 						{@html icons.get("layers", "size-8")}
 						<div class="flex flex-col items-end">
 							<span class="text-xs text-zinc-400">[ <span class="text-zinc-200">02</span> ]</span>
-							<span class="text-xs text-zinc-400 uppercase">[ structure ]</span>
-						</div>
+						<span class="text-xs text-zinc-400 uppercase">[ decay ]</span>
 					</div>
-					<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Multi-sector embeddings</h1>
-					<p class="text-zinc-400">Encode conversations into five synchronized dimensional vectors that elegantly <span class="text-zinc-100">preserve nuance across sessions</span>.</p>
+				</div>
+				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Decay and reinforcement</h1>
+				<p class="text-zinc-400">Confidence decays on a deterministic schedule and <span class="text-zinc-100">strengthens on explicit reinforcement</span>, so memory never needs manual tuning.</p>
 				</div>
 				<img src="/assets/images/52.png" alt="" class="object-cover w-full h-full object-top-left absolute top-28 left-0 ml-32 mt-36 bottom-0 z-0 scale-150" />
 				<div class="absolute bottom-0 h-20 w-full bg-gradient-to-t from-black z-10 hidden"></div>
@@ -462,7 +462,7 @@
 	<div class="max-w-7xl w-full h-full border border-stone-900 overflow-clip mt-10 bg-black grid grid-cols-3 gap-4">
 		<div class="w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm col-span-3">
 			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">03</span> / 04 ]</h1>
-			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ I'm not sure ]</span>
+			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ lifecycle ]</span>
 		</div>
 		<div class="w-full h-full border-b border-stone-900 relative overflow-hidden col-span-3">
 			<div class="p-8 relative z-10 mt-2 bg-black">
@@ -473,8 +473,8 @@
 						<span class="text-xs text-zinc-400 uppercase">[ decay engine ]</span>
 					</div>
 				</div>
-				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">How memory decay stays graceful and useful</h1>
-				<p class="text-zinc-400">Memories fade following curved trajectories, while reinforcement pulses lift critical context back above the retention threshold.</p>
+				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Memory that ages the way your product needs it to</h1>
+				<p class="text-zinc-400">Confidence decays deterministically, reinforcement is explicit, and every change leaves a provenance trail back to its trigger.</p>
 			</div>
 			<img src="/assets/images/x5.png" alt="" class="object-cover object-top -mt-20 w-full h-[400px] z-0 skew-x-[25deg] skew-y-[-10deg] rotate-6" />
 			<div class="absolute bottom-0 h-64 w-full z-30 bg-gradient-to-b from-transparent to-black"></div>
@@ -489,8 +489,8 @@
 						<span class="text-xs text-zinc-400 uppercase">[ awareness ]</span>
 					</div>
 				</div>
-				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Sector-aware decay</h1>
-				<p class="text-zinc-400">Each memory dimension carries its own slope and minimum floor so emotional cues linger longer than transient facts.</p>
+				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Deterministic decay</h1>
+				<p class="text-zinc-400">Each memory ages on a predictable curve with a configurable floor, so retrieval stays explainable instead of mysterious.</p>
 			</div>
 		</div>
 		<div class="w-full h-full border-x border-t border-stone-900 border-b-0 relative overflow-hidden">
@@ -502,8 +502,8 @@
 						<span class="text-xs text-zinc-400 uppercase">[ autonomous ]</span>
 					</div>
 				</div>
-				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Automatic reinforcement</h1>
-				<p class="text-zinc-400">Signal spikes from conversations or tool outcomes fire a pulse that restores strength without manual resets.</p>
+				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Explicit reinforcement</h1>
+				<p class="text-zinc-400">Reinforcement events restore strength on demand, driven by real signals from conversations or tool outcomes, never a hidden background job.</p>
 			</div>
 		</div>
 		<div class="w-full h-full border-l border-t border-stone-900 border-b-0 relative overflow-hidden">
@@ -515,15 +515,15 @@
 						<span class="text-xs text-zinc-400 uppercase">[ attribution ]</span>
 					</div>
 				</div>
-				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Attribution trails</h1>
-				<p class="text-zinc-400">Every reinforcement links back to its trigger so agents can explain why context remained in play.</p>
+				<h1 class="text-xl font-medium text-zinc-100 mb-2 mt-4">Full provenance</h1>
+				<p class="text-zinc-400">Every reinforcement and decay step links back to its trigger, so agents can explain why a memory is still in play.</p>
 			</div>
 		</div>
 	</div>
 	<div class="max-w-7xl w-full h-full border border-stone-900 overflow-clip mt-10 bg-black">
 		<div class="w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm col-span-3">
 			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">04</span> / 04 ]</h1>
-			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ I'm not sure ]</span>
+			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ get started ]</span>
 		</div>
 		<div class="w-full py-16 px-10">
 			<h1 class="text-2xl font-medium text-zinc-100 mb-2 mt-4">Get Started in Minutes</h1>
@@ -560,14 +560,14 @@
 				<div class="max-h-[500px] w-full overflow-y-auto text-sm font-mono">
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">01</span>
-						<span class="text-zinc-500 ml-4">// Add a memory with automatic multi-sector embedding</span>
+						<span class="text-zinc-500 ml-4">// Ingest a memory through the REST API</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">02</span>
 						<span class="text-rose-400 ml-4">await</span>
 						<span class="text-amber-400 ml-1">fetch</span>
 						<span>(</span>
-						<span class="text-green-400">'http://localhost:3000/memory/add'</span>
+						<span class="text-green-400">'http://localhost:3000/v1/ingest'</span>
 						<span>, &#123;</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
@@ -597,23 +597,16 @@
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">06</span>
-						<span class="ml-12 text-zinc-300">content</span>
+						<span class="ml-12 text-zinc-300">user_id</span>
 						<span>:&nbsp;</span>
-						<span class="text-green-400">'User prefers dark mode and minimal UI design'</span>
+						<span class="text-green-400">'alice'</span>
 						<span>,</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">07</span>
-						<span class="ml-12 text-zinc-300">metadata</span>
-						<span>:&nbsp;&#123;&nbsp;</span>
-						<span class="text-zinc-300">source</span>
+						<span class="ml-12 text-zinc-300">text</span>
 						<span>:&nbsp;</span>
-						<span class="text-green-400">'preferences'</span>
-						<span>,&nbsp;</span>
-						<span class="text-zinc-300">category</span>
-						<span>:&nbsp;</span>
-						<span class="text-green-400">'UI'</span>
-						<span>&nbsp;&#125;</span>
+						<span class="text-green-400">'I prefer TypeScript for backend services'</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">08</span>
@@ -628,7 +621,7 @@
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">11</span>
-						<span class="text-zinc-500 ml-4">// Query memories with decay-weighted relevance scoring</span>
+						<span class="text-zinc-500 ml-4">// Recall with an explicit mode: strict, historical, associative, or world_grounded</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">12</span>
@@ -638,7 +631,7 @@
 						<span class="text-rose-400 ml-1">await</span>
 						<span class="text-amber-400 ml-1">fetch</span>
 						<span>(</span>
-						<span class="text-green-400">'http://localhost:3000/memory/query'</span>
+						<span class="text-green-400">'http://localhost:3000/v1/recall'</span>
 						<span>, &#123;</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
@@ -668,16 +661,16 @@
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">16</span>
-						<span class="ml-12 text-zinc-300">query</span>
+						<span class="ml-12 text-zinc-300">text</span>
 						<span>:&nbsp;</span>
-						<span class="text-green-400">'What are user interface preferences?'</span>
+						<span class="text-green-400">'What language does Alice prefer?'</span>
 						<span>,</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">17</span>
-						<span class="ml-12 text-zinc-300">topK</span>
+						<span class="ml-12 text-zinc-300">mode</span>
 						<span>:&nbsp;</span>
-						<span class="text-amber-400">5</span>
+						<span class="text-green-400">'strict'</span>
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center text-zinc-400 hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">18</span>
@@ -708,7 +701,7 @@
 					</div>
 					<div class="w-full border-l border-stone-900 py-1 pl-4 flex items-center hover:border-stone-600 hover:bg-stone-950 transition-all duration-100">
 						<span class="text-zinc-500 select-none">23</span>
-						<span class="text-zinc-500 ml-4">// Results include memories with decay scores and sector breakdowns</span>
+						<span class="text-zinc-500 ml-4">// Results include evidence, confidence, and a traceable provenance chain</span>
 					</div>
 				</div>
 			</div>
@@ -733,7 +726,7 @@
 		<div class="w-full mt-36 grid grid-cols-3 gap-8 mx-auto">
 			<div class="relative col-span-2">
 				<h1 class="text-3xl font-medium text-zinc-100">Longmemory</h1>
-				<p class="text-zinc-400 mt-4">An open-sourced project under the MIT License.</p>
+				<p class="text-zinc-400 mt-4">An open-source project licensed under the Apache License 2.0.</p>
 				<p class="text-zinc-400">(c) 2026 Longmemory, CaviraOSS and contributors.</p>
 			</div>
 			<div class="relative items-end flex flex-col">

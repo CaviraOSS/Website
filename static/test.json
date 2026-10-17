@@ -10,27 +10,25 @@
 			{
 				"text": "Introduction",
 				"href": "introduction",
-				"type": "text",
 				"data": [
 					{
 						"heading": "Introduction to LongMemory",
 						"paragraphs": [
-							"LongMemory is a local-first, cognitive memory engine for AI agents. It features temporal knowledge graphs, multi-sector embeddings, and adaptive decay.",
-							"LongMemory is a production-ready long-term memory system designed specifically for AI agents and conversational systems. It implements the HMD v2 (Holistic Memory Descriptor v2) specification with advanced features like multi-sector embeddings, time-based decay, and graph-based waypoints."
+							"LongMemory is a local-first, self-hosted memory engine for LLM applications and autonomous agents. It ships as one TypeScript package, longmemory, with no separate SDK \u2014 the package is the SDK, usable as a library, a CLI, or a self-hosted HTTP/MCP server.",
+							"At its core is the Hydrograph: immutable content-addressed nodes connected by executable edges, organized into worlds and entities, with full temporal and provenance tracking. Recall is never a single flat vector search \u2014 it runs through one of four explicit modes (strict, historical, associative, world-grounded), each with its own gates for temporal validity, contradictions, contracts, confidence, and grounding."
 						]
 					},
 					{
 						"heading": "Why LongMemory?",
 						"paragraphs": [
-							"LongMemory is the ideal solution for AI agents that need to maintain a persistent, contextual understanding of their environment and interactions over time.",
-							"Most 'memory' solutions are just vector databases wrapped in a Python script. OpenMemory is different. It is a Cognitive Engine."
+							"Most systems called memory are retrieval pipelines: split text into chunks, embed the chunks, return the nearest vectors. That does not establish what was true at a particular time, whether a new fact superseded an old one, which source is authoritative, who is allowed to see a result, or why a result belongs in context at all.",
+							"LongMemory models those concerns directly: temporal truth, where recorded time and valid time are tracked separately. Immutable memory, where content, vectors, hashes, and provenance are never rewritten by recall or decay. An executable graph, where typed relationships such as supersession participate directly in recall and explanation. Governance, where project, tenant, user, team, role, agent, task, and framework scope are enforced at the engine level. A lifecycle of deterministic decay, explicit reinforcement, consolidation, compression, and reconsolidation. And evidence-bounded recall, where results are limited by relevance, contradictions, grounding, permissions, and token cost."
 						],
 						"subitems": [
 							{
-								"heading": "The problem",
+								"heading": "The problem with vector-store-only memory",
 								"paragraphs": [
-									"LongMemory is the ideal solution for AI agents that need to maintain a persistent, contextual understanding of their environment and interactions over time.",
-									"Most 'memory' solutions are just vector databases wrapped in a Python script. OpenMemory is different. It is a Cognitive Engine."
+									"A plain vector store can tell you that ten chunks are semantically close to a query. It cannot tell you which of two conflicting chunks is current, whether the requesting agent is even allowed to see either of them, or why a chunk from six months ago is still being returned. LongMemory treats those as first-class engine questions, not something your application has to reconstruct on top of a generic retrieval API."
 								]
 							}
 						]
@@ -38,52 +36,249 @@
 				]
 			},
 			{
-				"text": "Purpose",
-				"href": "purpose"
-			},
-			{
-				"text": "Key concepts",
-				"href": "concepts"
-			},
-			{
-				"text": "Standalone vs Server",
-				"href": "standalone-vs-server"
-			}
-		]
-	},
-	{
-		"label": "Installation",
-		"items": [
-			{
-				"text": "Install Guide",
+				"text": "Installation",
 				"href": "install",
 				"data": [
 					{
 						"heading": "Standalone mode",
 						"paragraphs": [
-							"Run as a library in your app, best for local agents, CLI tools, and single-user applications."
+							"Run LongMemory as a library inside your own app. Best for local agents, CLI tools, and single-user applications \u2014 no external service or database is required for in-memory use."
 						],
 						"subitems": [
 							{
-								"heading": "JavaScript/TypeScript",
+								"heading": "JavaScript / TypeScript",
 								"paragraphs": [
-									"Install the package via npm or yarn.",
+									"Install the package via npm, pnpm, or yarn.",
 									{
 										"type": "command",
 										"lang": "bash",
-										"data": "npm install openmemory-js"
+										"data": "npm install longmemory"
+									},
+									{
+										"type": "command",
+										"lang": "ts",
+										"data": "import { createMemory } from 'longmemory';\n\nconst memory = await createMemory();\nawait memory.ingest({\n  user_id: 'alice',\n  text: 'I prefer TypeScript for backend services',\n});\n\nconst result = await memory.recall({\n  text: 'What language does Alice prefer?',\n  mode: 'strict',\n});\n\nawait memory.close();"
+									},
+									"To persist across restarts, point createMemory at a SQLite file instead.",
+									{
+										"type": "command",
+										"lang": "ts",
+										"data": "const memory = await createMemory({\n  store: 'sqlite',\n  db_path: './longmemory.db',\n  tenant_id: 'acme',\n  user_id: 'alice',\n});"
+									},
+									"Reopening the same database file restores nodes, worlds, entities, edges, temporal history, grounding, and lifecycle state exactly as they were."
+								]
+							},
+							{
+								"heading": "CLI",
+								"paragraphs": [
+									{
+										"type": "command",
+										"lang": "bash",
+										"data": "npm install --global longmemory\nlongmemory init\nlongmemory recall \"current project priorities\" --mode associative"
 									}
 								]
 							},
 							{
-								"heading": "JavaScript/TypeScript",
+								"heading": "Python client",
 								"paragraphs": [
-									"Install the package via npm or yarn.",
+									"The Python client talks to a self-hosted LongMemory server over HTTP.",
 									{
 										"type": "command",
 										"lang": "bash",
-										"data": "npm install openmemory-js"
-									}
+										"data": "pip install longmemory-sdk"
+									},
+									{
+										"type": "command",
+										"lang": "python",
+										"data": "from longmemory import LongMemory\n\nmemory = LongMemory(\n    \"http://127.0.0.1:7331\",\n    api_key=\"change-me\",\n    user_id=\"alice\",\n)\n\nmemory.ingest(\"I prefer TypeScript\")\nresult = memory.recall(\"What language do I prefer?\", mode=\"strict\")"
+									},
+									"The Python package is a zero-dependency HTTP client \u2014 it talks to a self-hosted LongMemory server over HTTP. The Hydrograph engine itself always runs in the TypeScript service; there is no separate Python engine."
+								]
+							}
+						]
+					},
+					{
+						"heading": "Server mode",
+						"paragraphs": [
+							"Run LongMemory as a standalone HTTP and MCP service shared by multiple clients.",
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "git clone https://github.com/CaviraOSS/LongMemory.git\ncd LongMemory\ncorepack enable\npnpm install --frozen-lockfile\npnpm build\npnpm start"
+							},
+							"The API listens on http://127.0.0.1:7331 by default. See Deployment for Docker, Docker Compose, and hosted-platform options."
+						]
+					}
+				]
+			},
+			{
+				"text": "Quickstart",
+				"href": "quickstart",
+				"data": [
+					{
+						"heading": "Quick start: Standalone",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "npm install longmemory"
+							},
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "import { createMemory } from 'longmemory';\n\nconst memory = await createMemory();\n\nawait memory.ingest({\n  user_id: 'alice',\n  text: 'I prefer TypeScript for backend services',\n});\n\nconst result = await memory.recall({\n  text: 'What language does Alice prefer?',\n  mode: 'strict',\n});\n\nconsole.log(result);\nawait memory.close();"
+							},
+							"That is a complete, working example \u2014 no database setup, no API keys, no network calls. By default, embeddings fall back to a deterministic synthetic provider so recall works out of the box; configure a real provider such as OpenAI, Gemini, NVIDIA, AWS Bedrock, Ollama, Siray, or a local HTTP model when you want semantic ranking tuned to your own data."
+						]
+					},
+					{
+						"heading": "Quick start: Server",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "git clone https://github.com/CaviraOSS/LongMemory.git\ncd LongMemory\ncorepack enable\npnpm install --frozen-lockfile\npnpm build\npnpm start"
+							},
+							"The server listens on http://127.0.0.1:7331. Check that it is up, then ingest and recall over HTTP.",
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "curl http://127.0.0.1:7331/health\n\ncurl -X POST http://127.0.0.1:7331/v1/ingest \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"user_id\":\"alice\",\"text\":\"I prefer TypeScript for backend services\"}'\n\ncurl -X POST http://127.0.0.1:7331/v1/recall \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"text\":\"What language does Alice prefer?\",\"mode\":\"strict\",\"k\":5}'"
+							},
+							"Prefer Docker? The fastest path is Docker Compose.",
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "cp .env.example .env\ndocker compose up --build -d longmemory"
+							},
+							"API and MCP are reachable at http://127.0.0.1:7331, with health at /health. Add --profile ui to also start the dashboard at http://127.0.0.1:3000."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Architecture",
+		"items": [
+			{
+				"text": "The Hydrograph",
+				"href": "architecture",
+				"data": [
+					{
+						"heading": "The Hydrograph",
+						"paragraphs": [
+							"LongMemory's substrate is called the Hydrograph: immutable, content-addressed nodes connected by executable edges, organized into worlds and entities, with full temporal and provenance tracking on every node.",
+							"Events, documents, and sessions flow through an immutable ingest pipeline into the Hydrograph. From there, strict and historical recall, associative recall, world-grounded recall, and project memory all read from the same graph and write to the same SQLite store. Context assembled by any recall mode feeds the library, CLI, and HTTP API, plus MCP tools, resources, and prompts \u2014 and from there into agents, IDEs, automation, the dashboard, and the VS Code extension.",
+							"Nodes are immutable: content, vectors, hashes, and provenance are never rewritten by recall or decay \u2014 corrections create new state instead of mutating history. Edges are executable: typed relationships such as supersession participate directly in recall and explanation, not just as inert labels. Worlds and entities scope and organize nodes so recall can be bounded to a tenant, project, or subject instead of searching a single global index. Storage is durable and local-first: SQLite is the default store, and reopening the same database file restores nodes, worlds, entities, edges, temporal history, grounding, and lifecycle state exactly as they were."
+						]
+					},
+					{
+						"heading": "From ingest to context",
+						"paragraphs": [
+							"Ingest: events, documents, and sessions enter through an immutable ingest pipeline. Every ingest produces a trace, currently 14 steps, inspectable via GET /v1/explain/:id.",
+							"Graph: the pipeline writes nodes and executable edges into the Hydrograph, scoped by world and entity.",
+							"Recall: one of four modes (strict, historical, associative, world-grounded) walks the graph under its own gates and produces an explainable, token-bounded context packet.",
+							"Surfaces: the same context powers the npm library, CLI, self-hosted HTTP API, MCP tools, the dashboard, and the VS Code extension. There is only one engine; every surface calls the same createMemory."
+						]
+					},
+					{
+						"heading": "Lifecycle",
+						"paragraphs": [
+							"Long-lived memory needs more than storage \u2014 it needs deterministic decay, explicit reinforcement, consolidation, compression, and reconsolidation so a store that runs for months stays useful instead of just growing.",
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "longmemory maintenance decay --all\nlongmemory maintenance reinforce <memory-id>"
+							},
+							"Decay runs on a deterministic curve so its effect is explainable and reproducible, not an opaque background heuristic. Reinforcement is always an explicit action tied to a specific memory id."
+						]
+					},
+					{
+						"heading": "Project memory and governed assets",
+						"paragraphs": [
+							"On top of the Hydrograph, LongMemory also tracks project memory \u2014 architecture, decisions, tasks, conventions, failures, handoffs, and code impact \u2014 and governed assets (Chat Memory, Skills, LLM-Wiki, CodeGraph) under lifecycle and ACL policy. A session porter imports history directly from Claude Code, Codex, OpenCode, Gemini CLI, Copilot Chat, Cline, and raw harness logs."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Core Concepts",
+		"items": [
+			{
+				"text": "Immutability and Content Addressing",
+				"href": "concepts-immutability",
+				"data": [
+					{
+						"heading": "Why the substrate is immutable",
+						"paragraphs": [
+							"Every durable node in LongMemory is immutable and content-addressed. This is a product constraint, not an implementation detail.",
+							"A durable node, a HydroNode, is never edited in place. When something changes \u2014 a preference updates, a fact is corrected, a belief is contradicted \u2014 LongMemory writes a new node and connects it to the old one with an executable edge such as supersedes, contradicts, or grounds. The old node is never deleted and never silently rewritten.",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "// What actually happens: a new immutable node, linked by an edge\nawait memory.ingest({ user_id: 'alice', text: 'I prefer coffee' });\n// creates a new node, and a supersedes edge back to the old \"I prefer tea\" node"
+							}
+						]
+					},
+					{
+						"heading": "Content addressing",
+						"paragraphs": [
+							"Every node's id is derived from its own content, not an auto-incrementing counter. Two nodes with identical durable content hash to the same value, so the graph deduplicates naturally instead of accumulating near-identical rows. Divergent content always produces a new hash, so versioning is just distinct nodes linked by edges, never a destructive overwrite. A Merkle-style root over all node hashes gives a single integrity check that can detect tampering across the whole durable set."
+						]
+					},
+					{
+						"heading": "Why this is a hard requirement",
+						"paragraphs": [
+							"It prevents silent memory rewrite. If a durable fact could be edited in place, a later write could quietly change what the system remembers having known, with no trace left behind. With content addressing, changing content necessarily produces a different node; the original is never touched.",
+							"It supports audit. Every node carries provenance: who created it, how it was extracted, and its source trace. Because nodes cannot change, that audit trail is stable.",
+							"It enables historical reconstruction. Combined with bitemporal timestamps, immutability lets LongMemory reconstruct both what was true at a past moment and what the system believed at a past moment, without ever losing a superseded truth."
+						]
+					},
+					{
+						"heading": "What is and isn't part of the hash",
+						"paragraphs": [
+							"The content hash covers the durable facts: content, facets, world, and the durable fact's onset (valid_from, observed_at). It deliberately does not cover mutable runtime state (state, vectors, grounding), bitemporal bookkeeping (valid_to, superseded_at), or the transaction timestamp (recorded_at).",
+							"That split matters: a node's identity stays stable while it gets superseded, grounded, supported by new evidence, and its confidence or decay evolves. A memory's status can change over its lifetime without it ever becoming a different memory."
+						]
+					}
+				]
+			},
+			{
+				"text": "Worlds and Facets",
+				"href": "concepts-worlds",
+				"data": [
+					{
+						"heading": "Worlds and facets",
+						"paragraphs": [
+							"LongMemory separates two questions that older flat-sector memory systems conflate: what kind of memory is this (a facet: semantic, episodic, procedural, emotional, reflective), and where, under what context, does it live (a world). Worlds are recursive containers, not flat sectors.",
+							"A world can contain nodes, edges, and other worlds. Worlds nest to arbitrary depth, which is what lets LongMemory express something a flat sector never could: \"Project Alpha, deployment, incidents\" is a path, not a bucket. A query can scope to one specific world or to an entire subtree beneath it."
+						]
+					},
+					{
+						"heading": "Why recursion matters in practice",
+						"paragraphs": [
+							"Project memory is the clearest example: a tenant contains organizations, which contain projects, which contain repositories, documents, issues, decisions, architecture notes, and agent sessions, each its own real recursive world. A recall scoped to one project's world subtree physically cannot leak nodes from a different project, because there is no edge crossing between them unless an explicit refers_to edge is traversed."
+						]
+					},
+					{
+						"heading": "World embeddings compose bottom-up",
+						"paragraphs": [
+							"A world's vector is a normalized weighted combination of its child node vectors, its child world vectors, its relation (edge) vectors, a grounding vector, and an ontology vector. Because child world vectors feed into their parent, embeddings compose bottom-up: a parent world's vector reflects everything beneath it, all the way down."
+						]
+					},
+					{
+						"heading": "Contracts resolve down the tree",
+						"paragraphs": [
+							"Worlds may carry contracts that affect recall. Contracts resolve down the tree: a child world inherits its ancestors' contract and may override any part of it, with the nearest ancestor winning. That means you can tighten recall rules for one sensitive sub-world, for example requiring grounding, without touching sibling worlds at all."
+						],
+						"subitems": [
+							{
+								"heading": "Rules",
+								"paragraphs": [
+									"Worlds can contain child worlds. A node can carry multiple facets at once. A node has one primary world but may be referenced by other worlds. Moving a node records placement history; it never erases the old placement. A parent world's hash changes whenever any child's state changes, so structural integrity rolls up to the root. Worlds may carry contracts that affect recall."
 								]
 							}
 						]
@@ -91,12 +286,919 @@
 				]
 			},
 			{
-				"text": "Quick start (Standalone)",
-				"href": "quickstart"
+				"text": "Executable Edges",
+				"href": "concepts-edges",
+				"data": [
+					{
+						"heading": "Executable edges",
+						"paragraphs": [
+							"In most graph-based memory systems, an edge is a passive label: it records that a relationship exists, and then nothing happens. LongMemory bans that pattern. In the Hydrograph, inserting an edge runs code. Each edge type ships a handler, and that handler updates truth state, contradiction state, grounding state, confidence, and entity identity as part of the same atomic write."
+						]
+					},
+					{
+						"heading": "Why passive labels fail in practice",
+						"paragraphs": [
+							"Truth drift: a supersedes label that never closes the old fact's validity leaves stale truth readable by strict recall. Silent inconsistency: contradiction labels with no pressure accounting let two conflicting facts both get treated as confident. Ungoverned grounding: a grounds label with no score update cannot tell world-grounded recall whether a fact is actually confirmed. Scattered logic: the real meaning of an edge ends up duplicated across every reader that touches it, and they drift apart over time."
+						]
+					},
+					{
+						"heading": "The single entry point",
+						"paragraphs": [
+							"All edge insertion goes through one function, insertEdge(edge, context). It validates the edge, finds the handler registered for the edge type, runs the handler atomically with a snapshot-and-rollback guarantee, updates affected nodes as new frozen versions, writes an audit entry, and returns an EdgeExecutionResult. If a handler throws, every change made so far is rolled back and the error propagates. An unknown edge type throws immediately rather than being silently ignored."
+						]
+					},
+					{
+						"heading": "The default ontology",
+						"paragraphs": [
+							"contains (parent/world to child) adds the child to the parent and recomputes the parent world's Merkle hash.",
+							"refers_to (node to node) records a lightweight reference with no node mutation.",
+							"same_as (alias to canonical) links an alias to its canonical entity, keeping historical mentions intact.",
+							"supports (evidence to target) raises the target's confidence via an evidence update and records the source.",
+							"contradicts (node to node) creates an unresolved contradiction, raises pressure, and flags both sides.",
+							"supersedes (new to old) closes the old node's validity, marks it superseded, and transfers salience.",
+							"derived_from (derived to source) links a derived memory to its source and preserves the provenance chain.",
+							"grounds (endocortex to world) links a subjective memory to external truth and raises its grounding score.",
+							"semantic_shift (earlier to later) records meaning drift without overwriting entity identity.",
+							"You can register your own edge types with custom handlers through a stable trait; the ontology is not closed."
+						]
+					},
+					{
+						"heading": "Atomicity and immutability together",
+						"paragraphs": [
+							"Handlers never mutate durable nodes in place. Each update produces a new frozen node version with the same id and content hash; only envelope fields such as state, grounding, temporal bookkeeping, and provenance trace change. Because the runtime snapshots working state before running a handler, a partial handler failure leaves the graph exactly as it was before the attempt."
+						]
+					}
+				]
 			},
 			{
-				"text": "Quick start (Server)",
-				"href": "quickstart-server"
+				"text": "Entities and Resolution",
+				"href": "concepts-entities",
+				"data": [
+					{
+						"heading": "Entities and conservative resolution",
+						"paragraphs": [
+							"A memory graph depends entirely on knowing that Alice Chen, A. Chen, and my colleague Alice are the same person. Get that wrong and the damage compounds: a single bad merge corrupts every memory that later references the merged identity. LongMemory's entity resolver is deliberately conservative: it merges only under high confidence, creates a reviewable candidate when it is unsure, never forces an unsafe merge, and records meaning drift instead of silently overwriting it."
+						]
+					},
+					{
+						"heading": "The score",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "text",
+								"data": "score = w_name     * name_similarity\n      + w_vector   * vector_similarity\n      + w_context  * context_overlap\n      + w_temporal * temporal_compatibility\n      - w_conflict * conflict_penalty"
+							},
+							"Every term is deterministic and lands in [0, 1], so identical inputs always produce the identical decision. The conflict penalty is subtracted, not multiplied, so a strong conflict such as a type or domain mismatch can block a merge even when the names are identical."
+						]
+					},
+					{
+						"heading": "What the resolver decides",
+						"paragraphs": [
+							"Score at or above the merge threshold with no strong conflict: resolve to the canonical entity.",
+							"Score between the candidate and merge thresholds: create a reviewable candidate.",
+							"Score below the candidate threshold: create a new entity.",
+							"A strong conflict present: never merge, candidate or new entity only."
+						]
+					},
+					{
+						"heading": "Worked examples",
+						"paragraphs": [
+							"Alias: Alice Chen is registered with the alias A. Chen. A later mention of A. Chen resolves directly through the alias index, no scoring needed at all.",
+							"Same name, different context: John in a school domain and John in a hosting domain share a name but carry a domain mismatch. The conflict penalty drives the score down, and the resolver's unsafe-merge guard keeps them as two distinct entities rather than guessing.",
+							"Genuine ambiguity: Alicia Chen is similar to Alice Chen but not certain enough. The score lands between thresholds, so the resolver creates a MergeCandidate linking the new mention to Alice without merging them.",
+							"Semantic drift, not overwrite: Project Alpha starts as a weekend hobby and later becomes production infrastructure. Instead of overwriting the entity's meaning, the resolver records a semantic_shift edge and appends a drift_history entry; the original meaning stays queryable."
+						]
+					}
+				]
+			},
+			{
+				"text": "Temporal Model",
+				"href": "concepts-temporal",
+				"data": [
+					{
+						"heading": "The temporal model",
+						"paragraphs": [
+							"LongMemory stores every durable fact bitemporally, on two independent time axes that answer two different questions: valid time (valid_from, valid_to), when the fact was true in the modeled world, and recorded time (recorded_at, superseded_at), when the memory system knew the fact.",
+							"valid_to = null means still valid. superseded_at = null means still current in transaction history. Neither field is part of the node's content hash, so closing them does not change a node's durable identity."
+						]
+					},
+					{
+						"heading": "Three questions, three answers",
+						"paragraphs": [
+							"What is true now? queryCurrentTruth(candidates, now) returns what is valid now, known, and not superseded.",
+							"What was true then? queryHistory(candidates, validTime) returns what was valid at that world time, including superseded facts.",
+							"What did the agent believe before learning the correction? queryBeliefAsOf(candidates, recordedTime) returns what was known as of that transaction time."
+						]
+					},
+					{
+						"heading": "Worked example",
+						"paragraphs": [
+							"An agent learns in January: \"I use Python.\" In March it learns the correction: \"I switched to TypeScript.\"",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "const { superseded, current } = supersedeNode(python, typescript, MAR);\nconst candidates = [superseded, current];\n\nqueryCurrentTruth(candidates, APR);  // [TypeScript] \u2014 what is true now\nqueryHistory(candidates, FEB);       // [Python]      \u2014 what was true then\nqueryBeliefAsOf(candidates, FEB);    // [Python]      \u2014 belief before the correction"
+							},
+							"In February, current truth is Python, valid and not yet superseded. After the March correction, current truth is TypeScript. Historical recall for February still returns Python, because Python really was valid in the world then. Belief-as-of February also returns Python: that is what the system knew at that transaction time, before the correction was ever recorded."
+						]
+					},
+					{
+						"heading": "How recall modes use the two axes",
+						"paragraphs": [
+							"Strict recall uses only current truth; superseded facts are excluded entirely. Historical recall may use superseded facts, exactly when they were valid at the requested time. The temporal layer only decides visibility of candidate facts along these two axes; recall modes then apply their own admission gates on top."
+						]
+					}
+				]
+			},
+			{
+				"text": "Invariants",
+				"href": "concepts-invariants",
+				"data": [
+					{
+						"heading": "Invariants",
+						"paragraphs": [
+							"LongMemory's architecture is defined by a short list of invariants, product constraints every subsystem must respect, not implementation suggestions.",
+							"1. Durable nodes are immutable. 2. Every durable node is content-addressed. 3. Every durable fact is bitemporal. 4. Edges are executable. 5. Subjective memory and external world truth are separate. 6. Worlds are recursive containers, not flat sectors. 7. Facets are cognitive attributes, not storage buckets.",
+							"8. Strict recall cannot use superseded facts. 9. Strict recall cannot use unresolved contradictions. 10. World-grounded recall requires grounding. 11. Associative recall may use superseded memory or emotional residue, but must label it. 12. Compression cannot override truth. 13. The API server and CLI must use the same createMemory engine \u2014 there is exactly one engine behind every surface."
+						]
+					},
+					{
+						"heading": "Why a short, explicit list",
+						"paragraphs": [
+							"Most of these invariants exist because the alternative failure mode is subtle and silent: a cache that quietly serves stale truth, a contradiction that never gets flagged, an API server that drifts out of sync with the CLI's behavior because someone wired up a second code path just for one feature. Keeping the list short and explicit means every one of them is something you can test for directly, and something a reviewer can check a change against without reading the whole engine."
+						]
+					}
+				]
+			},
+			{
+				"text": "Formulas and Scoring",
+				"href": "concepts-formulas",
+				"data": [
+					{
+						"heading": "Formulas and scoring",
+						"paragraphs": [
+							"LongMemory does not average confidence, decay, or importance by feel; every dynamic quantity in the engine has an explicit, documented formula."
+						]
+					},
+					{
+						"heading": "Confidence",
+						"paragraphs": [
+							"Confidence updates in log-odds space, adding reliability-weighted evidence instead of averaging it.",
+							{
+								"type": "command",
+								"lang": "text",
+								"data": "logit(conf) = logit(prior)\n            + sum(source_reliability * log(likelihood_ratio))\n            - conflict_penalty\n            - age_penalty"
+							},
+							"A reliable source with a strong likelihood ratio moves confidence a lot; a weak or ungrounded source barely nudges it. Because the final step is a sigmoid, supporting evidence raises confidence but never reaches exactly one."
+						]
+					},
+					{
+						"heading": "Contradiction pressure",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "text",
+								"data": "contradiction_pressure = max(severity * confidence * unresolved)"
+							},
+							"An unresolved, severe contradiction between two confident memories produces the most pressure. Pressure lowers confidence in log-odds space and, while unresolved, actively blocks strict recall for the affected memories."
+						]
+					},
+					{
+						"heading": "Decay",
+						"paragraphs": [
+							"Retention is a sigmoid over everything that makes a memory worth keeping: importance, surprise, grounding, emotional intensity, utility, and confirmation, minus noise. The decay rate speeds up with noise and conflict, and slows down with retention and reinforcement. A memory's weight over time is an exponential decay plus any reinforcement pulses it has received.",
+							"The practical effect: an important, grounded, reinforced memory decays slowly. A low-importance, noisy one fades fast. longmemory maintenance reinforce <id> adds a pulse; longmemory maintenance decay --all applies the curve."
+						]
+					},
+					{
+						"heading": "Activation",
+						"paragraphs": [
+							"Activation ranks memories for working memory and recall, ACT-R style: a base activation from decaying access history, plus context association, task relevance, and grounding relevance, minus a contradiction penalty. Every access adds a decaying term to the base activation, so more frequent and more recent use raises activation."
+						]
+					},
+					{
+						"heading": "Surprise and grounding",
+						"paragraphs": [
+							"Surprise is approximated by novelty against the world or sector distribution: a memory unlike everything already seen has high surprise, and high surprise increases retention.",
+							"Grounding score combines source reliability, freshness, observation count, and external agreement, minus conflict, through a sigmoid. This score gates world-grounded recall, and it is recomputed live rather than cached."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Recall",
+		"items": [
+			{
+				"text": "Recall Modes Overview",
+				"href": "recall-overview",
+				"data": [
+					{
+						"heading": "Four recall modes, one engine",
+						"paragraphs": [
+							"Every recall call picks an explicit mode. There is no implicit default that silently mixes current and historical truth, or trusted and ungrounded evidence.",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "const strict = await memory.recall({ text: 'What is the current deployment region?', mode: 'strict' });\nconst historical = await memory.recall({ text: 'What was the deployment region in January?', mode: 'historical', valid_time: Date.UTC(2026, 0, 15) });\nconst associative = await memory.recall({ text: 'Incidents related to the payment migration', mode: 'associative' });\nconst grounded = await memory.recall({ text: 'Which production endpoint is currently live?', mode: 'world_grounded' });"
+							}
+						]
+					},
+					{
+						"heading": "The four modes, briefly",
+						"paragraphs": [
+							"Strict recall applies temporal, contradiction, contract, confidence, and grounding gates \u2014 use it when you want the current, validated answer or nothing at all.",
+							"Historical recall preserves superseded truth, answering what was true or believed at a past time.",
+							"Associative recall follows semantic, lexical, entity, activation, and graph signals together, for open-ended or exploratory questions.",
+							"World-grounded recall requires current external evidence; an ungrounded claim never passes.",
+							"Multilingual recall works across languages within the same memory store, using script detection, transliteration, and cross-language embeddings."
+						]
+					},
+					{
+						"heading": "Why explicit modes instead of one smart recall",
+						"paragraphs": [
+							"A single implicit recall mode has to guess whether you want the current answer, the historical one, or the most semantically similar one, and that guess is invisible until it is wrong. Explicit modes make the tradeoff a decision your application makes on purpose, and every result comes back with enough trace information to explain why it was or was not included."
+						]
+					}
+				]
+			},
+			{
+				"text": "Strict Recall",
+				"href": "recall-strict",
+				"data": [
+					{
+						"heading": "Strict recall",
+						"paragraphs": [
+							"Strict recall answers factual questions. It is deliberately not semantic search: an embedding match is only one signal, and it can never override validity. A memory that is superseded, contradicted, ungrounded when grounding is required, or low-confidence is rejected no matter how well its vector matches the query."
+						]
+					},
+					{
+						"heading": "The fixed pipeline",
+						"paragraphs": [
+							"1. Accept the query. 2. Parse query intent. 3. Resolve entities, read-only. 4. Select candidate worlds. 5. Retrieve candidates from the active index only; cold logs are never scanned. 6. Apply bitemporal validity. 7. Apply the memory contract gate. 8. Apply the contradiction gate. 9. Apply the grounding gate when required. 10. Score the survivors. 11. Build a context packet under the token budget. 12. Return an explain trace.",
+							"Steps 6 through 9 are the strict contract gate. Only candidates that pass every one of them reach scoring in step 10."
+						]
+					},
+					{
+						"heading": "Scoring, after gating",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "text",
+								"data": "score = w_vector      * semantic_similarity\n      + w_lexical     * lexical_score\n      + w_entity      * entity_match\n      + w_temporal    * temporal_relevance\n      + w_confidence  * confidence\n      + w_grounding   * grounding_score\n      + w_provenance  * provenance_quality\n      + w_utility     * utility\n      - w_contradiction * contradiction_pressure\n      - w_staleness   * staleness"
+							},
+							"Embeddings contribute only semantic_similarity, one term among many. Because scoring runs strictly after gating, a high embedding score can never resurrect a memory that already failed a validity gate."
+						]
+					},
+					{
+						"heading": "The not-cold-log guarantee and explain trace",
+						"paragraphs": [
+							"Candidate retrieval reads a hot and active index, not the full historical store; a coldScans counter stays at exactly zero throughout strict recall. Every call also returns an explain trace: which entities were resolved, which worlds were selected, how many candidates were retrieved, accepted, or rejected and why, each accepted candidate's score, and whether it made it into the final context packet."
+						]
+					}
+				]
+			},
+			{
+				"text": "Historical Recall",
+				"href": "recall-historical",
+				"data": [
+					{
+						"heading": "Historical recall",
+						"paragraphs": [
+							"Historical recall answers two different questions: what was true then, and what did the agent believe then. It uses the same bitemporal data as every other mode, so it may legitimately return a superseded memory, when that memory really was valid or really was believed at the time you are asking about. It never mutates anything."
+						]
+					},
+					{
+						"heading": "The flow",
+						"paragraphs": [
+							"1. Accept the query, with optional validTime or recordedTime. 2. Resolve entities, read-only. 3. Select worlds. 4. Query bitemporal candidates, including superseded nodes. 5. Include superseded nodes when they were historically valid. 6. Build correction chains by walking supersedes edges. 7. Distinguish world truth at time, agent belief at time, and current corrected truth. 8. Return the timeline plus an explain trace."
+						]
+					},
+					{
+						"heading": "Worked example",
+						"paragraphs": [
+							"An agent learns in January: \"I prefer tea.\" In March it corrects to \"I prefer coffee.\" The tea node closes and a supersedes edge links coffee to tea.",
+							"Query validTime = February (world truth): returns tea, it was valid in the world then. Query recordedTime = February (belief): returns tea, that is what the system knew then. Current truth at April: returns coffee, the corrected truth.",
+							"Every returned timeline entry exposes the full bitemporal envelope, so the answer is auditable without reconstructing it yourself. Historical recall only ever reads; nodes are frozen the moment they are written and are never mutated by a historical query."
+						]
+					}
+				]
+			},
+			{
+				"text": "Associative Recall",
+				"href": "recall-associative",
+				"data": [
+					{
+						"heading": "Associative recall",
+						"paragraphs": [
+							"Associative recall is not strict truth. It is the mode for pattern matching, emotional continuity, personalization, and reflection. It may surface a superseded or contradicted memory, but only with an explicit status label, and only when the memory's contract allows it. Running associative recall can never affect what strict recall returns."
+						]
+					},
+					{
+						"heading": "Signals combined per candidate",
+						"paragraphs": [
+							"Vector similarity (cosine between query and memory embeddings), lexical or BM25 score, entity overlap, ACT-R activation (recency plus salience plus relevance minus contradiction), bounded spreading activation over associative edges, and emotional residue used for personalization. A small status penalty downranks, but never excludes, superseded and contradicted memories."
+						]
+					},
+					{
+						"heading": "Controlled spreading and pattern recall",
+						"paragraphs": [
+							"Activation flows over the graph one hop at a time, bounded to maxHops (default 2) with pruning for small activations, so an irrelevant or disconnected part of the graph can never flood the recall context. A modern-Hopfield-style update also pulls a partial cue toward the nearest stored pattern; this is explicitly a pattern operation, not a truth operation, so it may return a superseded or purely subjective memory."
+						]
+					},
+					{
+						"heading": "Status labels and rules",
+						"paragraphs": [
+							"Every returned memory carries one of: superseded, contradicted, emotional_residue, weak_pattern, or active. Associative recall cannot update strict truth; superseded and contradicted memories must always be labeled as such; emotional residue may be used for personalization; graph expansion must stay bounded."
+						]
+					}
+				]
+			},
+			{
+				"text": "World-Grounded Recall",
+				"href": "recall-grounded",
+				"data": [
+					{
+						"heading": "World-grounded recall",
+						"paragraphs": [
+							"World-grounded recall answers factual questions using external world truth. It starts from subjective (endocortex) memories, but only accepts them when they are grounded to a fresh, reliable exocortex fact. Ungrounded claims never pass this gate."
+						]
+					},
+					{
+						"heading": "The flow",
+						"paragraphs": [
+							"1. Accept the query. 2. Resolve entities. 3. Select worlds. 4. Find endocortex memories related to the query. 5. Follow the grounds link to an exocortex fact. 6. Validate source freshness and reliability. 7. Apply the grounding score, recomputed live from the current fact. 8. Reconcile the subjective belief with the external fact. 9. Return the grounded context plus a grounding trace.",
+							"Because grounding is recomputed live on every call, an external world update changes the answer immediately: expire or replace a fact, and the memory that depended on it drops out on the very next query."
+						]
+					},
+					{
+						"heading": "Reconciliation outcomes",
+						"paragraphs": [
+							"confirmed: the memory agrees with the external fact. contradicted: the memory disagrees with the external fact. unconfirmed: partial or unclear agreement. subjective_only: no grounding; usable only as subjective context elsewhere.",
+							"Example: a memory \"the server is in Finland\" is grounded to a WorldDB fact. While fresh, it is returned as confirmed. When the fact expires, the gate rejects it on the next recall \u2014 the subjective memory itself still exists, it is simply no longer treated as a grounded fact."
+						]
+					}
+				]
+			},
+			{
+				"text": "Multilingual Recall",
+				"href": "recall-multilingual",
+				"data": [
+					{
+						"heading": "Multilingual recall",
+						"paragraphs": [
+							"LongMemory stores and recalls memory across human languages without making English the hidden source of truth. The original wording and script stay authoritative; normalization, transliteration, translation, and embeddings are derived search and presentation aids that can never bypass any validity, grounding, contradiction, permission, or contract gate."
+						]
+					},
+					{
+						"heading": "What gets preserved on ingest",
+						"paragraphs": [
+							"Every newly ingested node records language, script, direction, original_text, canonical_text, optional translated_text, optional transliteration, locale, code_switch_segments, and language_confidence. content.raw and content.original_text preserve the exact submitted string, including its original script and wording, and raw remains part of the content hash."
+						]
+					},
+					{
+						"heading": "Cross-lingual recall",
+						"paragraphs": [
+							"A query's language does not need to match the stored memory's language. Cross-lingual recall combines query language and script detection, language-aware lexical matching in both original and canonical text, transliteration search forms, explicit multilingual entity aliases, shared multilingual embeddings, and the same temporal, contract, contradiction, grounding, permission, and confidence gates every other mode uses. Translation is never treated as strict lexical truth."
+						]
+					},
+					{
+						"heading": "Multilingual embeddings",
+						"paragraphs": [
+							"A multilingual_embedding_provider hook accepts any provider that embeds text into a shared cross-language vector space. Without one configured, LongMemory falls back to a small deterministic embedding for predictable local development and tests. Either way, embeddings only influence ranking; admission gates run first, so similarity alone can never resurrect a stale, contradicted, unauthorized, ungrounded, or contract-forbidden memory."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Lifecycle",
+		"items": [
+			{
+				"text": "Memory Usage Contracts",
+				"href": "lifecycle-contracts",
+				"data": [
+					{
+						"heading": "Memory usage contracts",
+						"paragraphs": [
+							"Not every memory is usable everywhere. Each memory carries a contract that defines how it may be used, and every recall mode applies a gate that enforces that contract. A memory perfect for one mode may be forbidden in another, by design.",
+							"The contract controls: use for reasoning, personalization, prediction, and emotional context; use for associative recall; whether grounding is required; whether the memory expires if unconfirmed; a privacy level of public, private, sensitive, or secret; a maximum valid duration; and whether a source is required."
+						]
+					},
+					{
+						"heading": "What each recall mode's gate does",
+						"paragraphs": [
+							"Strict recall rejects superseded, contradicted, or low-confidence memory; memory sitting in an unresolved contradiction; ungrounded memory when grounding is required; memory whose contract forbids reasoning; expired memory, especially expired and unconfirmed memory; and memory missing a required source.",
+							"Historical recall allows superseded memory when it was valid at the requested time, and old agent beliefs when they were recorded as of the requested time, always labeled accordingly.",
+							"Associative recall allows superseded memories, emotional residue, and weak-pattern memories, but always labels what it admits, and only refuses memories whose contract forbids associative recall or that are marked secret.",
+							"World-grounded recall requires grounding to an exocortex fact above the grounding threshold, freshness of that grounding, provenance, and sufficient source reliability."
+						]
+					},
+					{
+						"heading": "Why gates matter",
+						"paragraphs": [
+							"Contracts turn \"can this memory be used here\" into an explicit, auditable decision instead of an implicit assumption. A personalization-only note never leaks into factual reasoning. An emotional memory can still color an associative answer while staying clearly labeled. A sensitive fact stays out of modes it was never licensed for. Every gate returns its reasons, so every admission or rejection is explainable after the fact."
+						]
+					}
+				]
+			},
+			{
+				"text": "Grounding",
+				"href": "lifecycle-grounding",
+				"data": [
+					{
+						"heading": "Endocortex versus exocortex",
+						"paragraphs": [
+							"LongMemory separates subjective memory from external truth into two zones. The endocortex holds what the agent thinks, feels, and remembers: user messages, agent observations, preferences, emotions, inferred beliefs, reflections, personal history. Endocortex memories are explicitly allowed to exist without any external grounding.",
+							"The exocortex holds verifiable external truth: tool results, API results, verified documents, databases, sensors, and WorldDB facts, reached through a WorldDBAdapter rather than being embedded directly into memory content."
+						]
+					},
+					{
+						"heading": "Grounding score and resonance",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "text",
+								"data": "grounding_score = sigmoid(\n    w_source      * source_reliability\n  + w_freshness   * freshness\n  + w_observation * observation_count\n  + w_agreement   * external_agreement\n  - w_conflict    * conflict\n)"
+							},
+							"Every grounding produces a GroundingTrace recording the signals, the weights, and a human-readable explanation. Resonance, how strongly a memory and an external fact reinforce each other, is a product of semantic similarity, grounding score, temporal overlap, and relation weight, so any single zero factor collapses it to zero."
+						]
+					},
+					{
+						"heading": "World updates ripple automatically",
+						"paragraphs": [
+							"When the exocortex changes, a fact is updated, expires, or is removed, the grounding layer re-evaluates every memory grounded to that fact. An expired or removed fact drops the grounding score, which can make a memory that requires grounding ineligible for strict factual recall again, without anyone manually invalidating it."
+						]
+					}
+				]
+			},
+			{
+				"text": "Consolidation",
+				"href": "lifecycle-consolidation",
+				"data": [
+					{
+						"heading": "Consolidation",
+						"paragraphs": [
+							"Consolidation converts clusters of raw episodic memories into higher-order semantic, procedural, reflective, or corrected grounded memories. Source memories are immutable and are never deleted; every derived memory links back to every source with a derived_from edge and carries the full source provenance trace forward.",
+							"A cluster consolidates when repetition, salience, grounding, utility, and confidence, minus contradiction and noise, meets a threshold (default 0.5)."
+						]
+					},
+					{
+						"heading": "The four consolidation forms",
+						"paragraphs": [
+							"Episodic to semantic: repeated statements become stable semantic memory; preferences stay subjective.",
+							"Episodic to procedural: repeated failures, fixes, retries, or successful actions become a procedural lesson.",
+							"Contradictions to reflection: connected, unresolved contradiction clusters become reflective summaries; reflection contracts disable strict reasoning and prediction.",
+							"World update to corrected belief: an explicit world correction creates a bitemporal semantic memory grounded to the current external fact; a correction that is already stale is skipped."
+						]
+					},
+					{
+						"heading": "Rules",
+						"paragraphs": [
+							"Source memories are never mutated or deleted. Every derived memory links to all of its sources. Every derived memory has a contract and full provenance. Factual outputs are bitemporal. Stale corrections are skipped, and stale factual clusters cannot enter strict recall as current truth. Consolidation must never silently alter evidence or override provenance."
+						]
+					}
+				]
+			},
+			{
+				"text": "Reconsolidation",
+				"href": "lifecycle-reconsolidation",
+				"data": [
+					{
+						"heading": "Reconsolidation",
+						"paragraphs": [
+							"A durable node is immutable, but what a memory means keeps changing as the world moves on. Reconsolidation reinterprets a memory at recall time against current truth, current grounding, current contradiction state, and its historical trace, and emits a corrected view. The original node is never touched."
+						]
+					},
+					{
+						"heading": "What a reconsolidated view contains",
+						"paragraphs": [
+							"original_id, current_status, current_truth when superseded, historical_residue, contradiction state with a warning, a live grounding trace, a recommended_mode, and preserved warnings and provenance."
+						]
+					},
+					{
+						"heading": "Recommended mode by situation",
+						"paragraphs": [
+							"Unresolved contradiction: associative, never current truth. Superseded: historical, with a pointer to current truth. Grounded, still valid, confirmed: world_grounded. Grounded but no longer valid: associative or historical. Requires grounding but ungrounded: associative. Current, plain fact: strict."
+						]
+					},
+					{
+						"heading": "Example",
+						"paragraphs": [
+							"While a \"there's a tiger nearby\" fact is valid, a related fear memory is world_grounded and confirmed. Once the fact expires, the tiger is no longer treated as currently present, but the fear itself is preserved as historical emotional residue, surfaced through associative recall instead."
+						]
+					}
+				]
+			},
+			{
+				"text": "Compression and Sketches",
+				"href": "lifecycle-compression",
+				"data": [
+					{
+						"heading": "Compression and sketches",
+						"paragraphs": [
+							"Hydrograph sketches are bounded, approximate summaries used purely for scalability: candidate selection, salience estimation, world-level concept compression, and drift tracking. They are never a source of truth; durable nodes, edges, contracts, bitemporal state, contradictions, and grounding remain authoritative."
+						]
+					},
+					{
+						"heading": "The sketch layer",
+						"paragraphs": [
+							"A Count-Min Sketch approximates frequencies for entities, tags, relation types, world activity, and repeated patterns. A Frequent Directions matrix stores a bounded summary for world-level concept compression, always satisfying rows at or below a max-rows budget. An Oja tracker follows a lightweight online principal concept for drift. All three merge and serialize deterministically."
+						]
+					},
+					{
+						"heading": "The boundary with strict recall",
+						"paragraphs": [
+							"Strict recall accepts an optional sketch-relevance callback, but only after temporal, contract, contradiction, grounding, and confidence gates have already accepted a node, with the resulting score boost clamped to 0.2. That ordering means an approximate sketch can reorder valid survivors, but it can never create a factual claim, override strict validity, resurrect a superseded memory, bypass a contradiction or grounding gate, or scan and rewrite cold history."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Data and Ingestion",
+		"items": [
+			{
+				"text": "The Ingest Pipeline",
+				"href": "data-ingest",
+				"data": [
+					{
+						"heading": "The ingest pipeline",
+						"paragraphs": [
+							"Ingestion converts a raw event into structured cognitive memory in a single transaction spanning working memory, entity resolution, recursive worlds, the durable graph, WorldDB, the active recall index, and compression sketches. If any step fails, every one of those stores rolls back together.",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "const engine = new IngestEngine();\n\nconst result = engine.ingest({\n  user_id: 'user:1',\n  text: 'I now prefer coffee instead of tea',\n  at: Date.now(),\n  tags: ['preference', 'beverage'],\n});"
+							}
+						]
+					},
+					{
+						"heading": "The fourteen-step flow",
+						"paragraphs": [
+							"Accept the raw event; add it to the bounded working-memory buffer; parse entities, claims, preferences, actions, procedures, emotions, reflections, and possible external facts; resolve every entity before any node creation or durable write; assign semantic, episodic, procedural, emotional, and reflective facets; select or create a recursive world; stage an immutable, content-addressed node; build and execute relationship edges; apply valid-time and recorded-time fields; attach live grounding where available; resolve the effective memory contract; stage active-index and sketch updates; optionally run consolidation; and commit, returning a MemoryDiff plus the full explain trace."
+						]
+					},
+					{
+						"heading": "The transaction model",
+						"paragraphs": [
+							"An IngestTransaction snapshots every ingest-owned mutable store: the durable graph, the entity resolver, the world graph, in-memory WorldDB facts, the hot recall index, compression sketches, and working memory. Any failure restores every one of those snapshots and throws, rather than leaving a partial write behind. The durable graph only commits once every edge handler has already succeeded."
+						]
+					}
+				]
+			},
+			{
+				"text": "Connectors",
+				"href": "data-connectors",
+				"data": [
+					{
+						"heading": "Connectors",
+						"paragraphs": [
+							"Connectors are ingestion sources for the Hydrograph, not vector loaders or authorities that silently overwrite memory. A connector discovers external items, fetches normalized documents or events, and produces a declarative import plan. It never writes memory directly \u2014 the shared createMemory facade validates and atomically applies that plan through recursive worlds, entity resolution, contracts, grounding, bitemporal MVCC, executable edge handlers, indexes, sketches, and persistence."
+						]
+					},
+					{
+						"heading": "Import plans are purely declarative",
+						"paragraphs": [
+							"A plan contains nodes to create, edges to create, worlds to create, entities to resolve, grounding references, contracts, provenance, and deletion or supersession actions. applyImportPlan is the only commit boundary: it snapshots state, creates or reuses worlds, resolves entities, ingests every planned node through the normal ingest pipeline, executes every planned edge through its handler, converts updates and deletions into supersession chains, and persists everything in one SQLite transaction \u2014 rolling back entirely if any step fails."
+						]
+					},
+					{
+						"heading": "Mapping rules and permissions",
+						"paragraphs": [
+							"Connector data defaults to the exocortex. Updates create new immutable node identities plus supersedes edges, never an in-place rewrite. Deletions create a non-reasoning tombstone rather than erasing history. Connector permissions (public, private, project, team, user_only, source_restricted) are persisted inside the memory contract, and all four recall modes check permission context before admitting a candidate \u2014 restricted data is denied outright when permission context is absent."
+						]
+					}
+				]
+			},
+			{
+				"text": "Embedding Providers",
+				"href": "data-embeddings",
+				"data": [
+					{
+						"heading": "Embedding providers",
+						"paragraphs": [
+							"LongMemory supports real semantic embedding providers without changing recall admission rules. Embeddings only rank candidates after temporal, contract, permission, contradiction, confidence, and grounding gates have already run."
+						]
+					},
+					{
+						"heading": "Supported providers",
+						"paragraphs": [
+							"OpenAI-compatible (OPENAI_API_KEY, text-embedding-3-small). Gemini (GEMINI_API_KEY, gemini-embedding-001). NVIDIA NIM (NVIDIA_API_KEY, nvidia/nemotron-3-embed-1b). AWS Bedrock (standard AWS credential chain, amazon.titan-embed-text-v2:0). Ollama (LONGMEMORY_OLLAMA_URL, nomic-embed-text). Local HTTP (LONGMEMORY_LOCAL_EMBEDDING_URL, local-model). Siray (SIRAY_API_TOKEN, text-embedding-3-small). Synthetic: no credentials, deterministic multilingual hashing.",
+							"All provider vectors are validated and L2-normalized. Most providers resize to the configured dimension automatically; NVIDIA requires matching dimensions and rejects malformed vectors rather than silently truncating or padding them."
+						]
+					},
+					{
+						"heading": "Configuration",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "env",
+								"data": "LONGMEMORY_EMBEDDING_PROVIDER=openai\nLONGMEMORY_EMBEDDING_TIER=deep\nLONGMEMORY_EMBEDDING_FALLBACK=ollama,synthetic\nLONGMEMORY_EMBEDDING_DIMENSION=1536\nLONGMEMORY_EMBEDDING_TIMEOUT_MS=30000\nLONGMEMORY_EMBEDDING_MAX_RETRIES=2\n\nOPENAI_API_KEY=..."
+							},
+							"With no provider configured at all, a deterministic synthetic embedding keeps recall functional with zero external credentials \u2014 ideal for local development, swap in a real provider once you want semantic ranking tuned to your own data."
+						]
+					}
+				]
+			},
+			{
+				"text": "SQLite Storage",
+				"href": "data-sqlite",
+				"data": [
+					{
+						"heading": "SQLite persistence",
+						"paragraphs": [
+							"SQLite is LongMemory's first durable backend: local-first, self-hostable, no separate database service to run, and it preserves every one of the Hydrograph's immutable-identity, executable-edge, bitemporal, grounding, audit, and sketch semantics exactly as the in-memory store does.",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "import { SqliteStore } from 'longmemory';\n\nconst store = new SqliteStore('./longmemory.db', {\n  tenantId: 'tenant:default',\n  userId: 'user:alice',\n});"
+							}
+						]
+					},
+					{
+						"heading": "Schema and integrity",
+						"paragraphs": [
+							"The initial migration creates tables for nodes, edges, worlds, entities, entity aliases, contradictions, grounded facts, memory contracts, the audit log, sketch states, cold logs, and migrations. Identity triggers prevent updates to a node's content hash, content, facets, world, zone, valid-time onset, and observation time, mirroring content-addressing at the storage layer.",
+							"The startup integrity check runs SQLite's quick_check, verifies every node's content hash, validates edge payload and index columns, and deserializes every sketch state, returning a report rather than terminating the process. A corrupt record returns null and is skipped, so the rest of a healthy database stays available."
+						]
+					},
+					{
+						"heading": "Restart and backup",
+						"paragraphs": [
+							"Closing and reopening the same database file restores nodes, temporal envelopes, worlds, entities, edges, grounding, and lifecycle state exactly as they were left. A normal file copy of the .db file is a complete backup."
+						]
+					}
+				]
+			},
+			{
+				"text": "Legacy Migration",
+				"href": "data-migration",
+				"data": [
+					{
+						"heading": "Legacy migration",
+						"paragraphs": [
+							"The longmemory migrate command brings existing memory into Hydrograph form. It does not preserve a legacy store's old storage architecture, indexes, cache state, or malformed data.",
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "longmemory migrate \\\n  --from ./legacy.db \\\n  --to ./longmemory.db \\\n  --report ./migration-report.json \\\n  --pretty"
+							},
+							"Migration never overwrites an existing destination and never prompts, so it is safe to run from CI or a shell pipeline. It reads legacy SQLite databases, JSON arrays or objects, and JSONL exports, and cleans each record conservatively: non-object or textless records are skipped, oversized payloads are skipped, duplicates collapse to one canonical record, and every skipped record gets a stable id and reason."
+						]
+					},
+					{
+						"heading": "How legacy data maps into Hydrograph",
+						"paragraphs": [
+							"Stable facts or preferences become semantic facets. Personal events become episodic facets. Procedures become procedural facets. Emotional content becomes emotional facets. Reflections become reflective facets. A changed preference becomes a supersedes edge with bitemporal closure. A conflicting claim becomes a contradicts edge. Source-backed external facts become exocortex nodes with grounding. Stale or expired facts get a closed valid-time, available historically but not in strict recall."
+						]
+					},
+					{
+						"heading": "Every migration runs a post-migration benchmark",
+						"paragraphs": [
+							"Before returning, the command checks SQLite and node integrity, successful hydration of an imported node, and persisted node counts. Check benchmark_result.passed before promoting the destination database into production use."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Agents and Project Memory",
+		"items": [
+			{
+				"text": "Project Memory",
+				"href": "agents-project-memory",
+				"data": [
+					{
+						"heading": "Project-wide memory",
+						"paragraphs": [
+							"Project memory gives long-running agents a scoped Hydrograph world for goals, architecture, decisions, requirements, source files, issues, failures, conventions, deployment facts, risks, and working state. It is not a global document index: every project is a recursive world subtree with its own permission contract, provenance, bitemporal history, contradictions, source snapshots, and recall policies.",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "import { createProjectMemory } from 'longmemory';\n\nconst projects = await createProjectMemory({\n  tenant_id: 'tenant:cavira',\n  organization_id: 'CaviraOSS',\n  project_id: 'longmemory',\n  name: 'LongMemory',\n  store: 'sqlite',\n  db_path: './longmemory.db',\n});"
+							}
+						]
+					},
+					{
+						"heading": "Ingesting project events and decisions",
+						"paragraphs": [
+							"Supported event kinds include architecture, decision, requirement, goal, constraint, task, bug, failure, preference, convention, deployment, risk, question, reference, agent state, code fact, and manual fact. Project updates are immutable revisions: architecture, decisions, requirements, goals, tasks, conventions, deployments, agent state, and code facts supersede the prior node for the same topic by default, while independent assertions that conflict create executable contradicts edges instead of silently picking a side.",
+							"Decision events preserve what was decided, the rationale, rejected alternatives, source and timestamp, and current or superseded status with a pointer to any replacement decision."
+						]
+					},
+					{
+						"heading": "Getting project context for a task",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "const context = await projects.getProjectContext('longmemory', 'prepare the next release');"
+							},
+							"Project context combines relevant architecture, current decisions, open tasks, failures, code facts, matched Skills, conflicts, and governed asset loadouts under one token budget."
+						]
+					}
+				]
+			},
+			{
+				"text": "Governed Agent Assets",
+				"href": "agents-assets",
+				"data": [
+					{
+						"heading": "Governed agent memory assets",
+						"paragraphs": [
+							"LongMemory turns agent work into four reusable project assets, without standing up a second memory engine: imported conversations become chat_memory assets, curated procedures become skill assets (approved immediately since the author supplied trigger, instructions, validation, and resources explicitly), document connector sync becomes llm_wiki assets, and repository connector sync becomes code_graph assets. Imported or inferred assets begin as review candidates."
+						]
+					},
+					{
+						"heading": "Assembling a loadout",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "const loadout = await projects.resolveAssetLoadout('longmemory', {\n  query: 'review the release architecture',\n  user_id: 'alice',\n  agent_id: 'reviewer',\n  framework: 'codex',\n  token_budget: 2048,\n});"
+							},
+							"Resolution filters by requested type, approved state, expiry, and deny-first access; matches enabled agent, task, or framework bindings; ranks by priority, relevance, and confidence; packs structured context under the token budget; and returns every exclusion with a reason. Tool and reference injection modes keep large Wiki and CodeGraph assets out of the prompt until an agent actually needs them."
+						]
+					},
+					{
+						"heading": "From the CLI",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "longmemory asset register --type llm_wiki --name \"Architecture wiki\" --owner alice --source-type docs --content-ref longmemory://project/current/wiki --status candidate\nlongmemory asset govern <asset-id> --status approved --agents reviewer --mode tool --priority 0.8\nlongmemory asset loadout \"review architecture\" --agent reviewer --framework codex"
+							}
+						]
+					}
+				]
+			},
+			{
+				"text": "Session Porter",
+				"href": "agents-session-porter",
+				"data": [
+					{
+						"heading": "Coding-harness session porter",
+						"paragraphs": [
+							"LongMemory ships a terminal-first workflow for discovering and importing local AI terminal and code-editor conversations into governed Chat Memory. Supported sources are Claude Code, Codex, OpenCode, Gemini CLI, VS Code Copilot Chat, Cline, and raw DeepSeek Harness session logs. Source adapters are strictly read-only; LongMemory never writes to another tool's proprietary session store.",
+							{
+								"type": "command",
+								"lang": "powershell",
+								"data": "longmemory tui\nlongmemory detect\nlongmemory session discover --from claude-code\nlongmemory port --from claude-code --to longmemory --all\nlongmemory verify --from opencode --sample 10\nlongmemory session wiki --from gemini-cli --all --name \"Project decisions\""
+							}
+						]
+					},
+					{
+						"heading": "One portable session model, idempotent imports",
+						"paragraphs": [
+							"Every adapter maps its source into one provider-neutral representation: native harness and session id, source path, a clean preview title, timestamps, ordered turns, model provenance, and parser diagnostics. The stable Chat Memory asset id derives from the source harness and native session id: a first import is created, an unchanged revision is skipped, and a changed or grown source is updated in place as a new immutable asset version. Raw session revisions stay immutable throughout."
+						]
+					},
+					{
+						"heading": "Converting conversations into a wiki",
+						"paragraphs": [
+							"session wiki converts selected conversations into a governed llm_wiki asset: an index, source and workspace provenance, stable timestamps, and normalized sections, generated deterministically without inventing model-generated summaries on top of what was actually said."
+						]
+					}
+				]
+			},
+			{
+				"text": "Evidence-Grounded Answering",
+				"href": "agents-evidence",
+				"data": [
+					{
+						"heading": "Evidence-grounded answering",
+						"paragraphs": [
+							"answer_from_evidence is an optional TypeScript adapter layered above memory retrieval, not a replacement for recall and not a hosted service. It works with evidence you supply and a language model you own; it never changes createMemory, ingestion, recall, HTTP routes, MCP tools, or model configuration. Every answer requires cited evidence, or the adapter reports that it could not find enough.",
+							{
+								"type": "command",
+								"lang": "ts",
+								"data": "const recalled = await memory.recall(scoped_query);\nreturn answer_from_evidence(\n  { question: scoped_query.text, sources: recalled.context.evidence, knowledge: 'evidence-only' },\n  model,\n);"
+							}
+						]
+					},
+					{
+						"heading": "The model contract and limits",
+						"paragraphs": [
+							"Supply an object with a generate(request) function; the adapter makes at most one callback invocation, with bounded context tokens (default 2048), bounded output tokens, a response size cap, and a timeout combined with caller cancellation. Up to 64 sources are accepted; an oversized source is omitted whole rather than truncated, and a later smaller source may still fit."
+						]
+					},
+					{
+						"heading": "Results",
+						"paragraphs": [
+							"answered: a non-empty answer with at least one verified-citation fact. insufficient_evidence: answer and inference are both null, with missing evidence described \u2014 your application renders its own localized abstention message. invalid_response: malformed, oversized, inconsistent, or unsupported output, with a reason code and no automatic repair call.",
+							"citations_verified means every citation refers to a source actually sent, with an exact quote. It does not verify semantic entailment, completeness, or truth \u2014 treat every returned string as untrusted when you render it, and apply appropriate review before any consequential decision relies on it."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Platform",
+		"items": [
+			{
+				"text": "REST API",
+				"href": "platform-rest-api",
+				"data": [
+					{
+						"heading": "Self-hosted REST API",
+						"paragraphs": [
+							"LongMemory includes a dependency-free HTTP server built on the same createMemory engine as the npm package and the CLI. SQLite is the default store, and it listens on 127.0.0.1:7331 by default.",
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "pnpm serve"
+							},
+							"Every successful response shares one envelope, { data, meta }, plus a Server-Timing header. Errors never expose stack traces. JSON bodies are limited to 1 MiB. When LONGMEMORY_API_KEY is set, send it as a bearer token or X-API-Key header; /health stays unauthenticated for platform health checks."
+						]
+					},
+					{
+						"heading": "Routes",
+						"paragraphs": [
+							"GET /health \u2014 engine readiness, store type, current statistics.",
+							"POST /v1/ingest \u2014 accepts user_id, text, at, world, tags; returns the full IngestResult including the 14-step trace.",
+							"POST /v1/recall \u2014 mode is required: strict, historical, associative, or world_grounded.",
+							"GET /v1/explain/:id \u2014 the memory, its edges, and its ingest trace.",
+							"GET /v1/worlds/:id and GET /v1/entities/:id \u2014 the public world or entity object.",
+							"GET /v1/timeline \u2014 accepts text, now, valid_time, recorded_time, world_id, entity_names.",
+							"GET /v1/stats \u2014 counts for nodes, edges, worlds, entities, grounded facts, and working memory."
+						]
+					}
+				]
+			},
+			{
+				"text": "MCP Server",
+				"href": "platform-mcp",
+				"data": [
+					{
+						"heading": "MCP integration",
+						"paragraphs": [
+							"LongMemory exposes one high-level Model Context Protocol server over the same createMemory engine used by the package, CLI, REST API, projects, and connectors, over both local stdio and remote Streamable HTTP transports.",
+							{
+								"type": "command",
+								"lang": "powershell",
+								"data": "longmemory mcp --db .longmemory/project.db --project current\n\n# Streamable HTTP\nlongmemory serve --db ./longmemory.db --mcp-http"
+							}
+						]
+					},
+					{
+						"heading": "The 13-tool allowlist",
+						"paragraphs": [
+							"longmemory_project_context, longmemory_recall, longmemory_ingest, longmemory_remember_decision, longmemory_update_task_state, longmemory_explain, longmemory_report_conflicts, longmemory_sync_connector, longmemory_match_skills, longmemory_manage_skill, longmemory_code_graph, longmemory_asset_catalog, longmemory_manage_asset.",
+							"Recall delegates straight to the Hydrograph recall modes and their gates. Connector sync defaults to dry_run true. Read-only mode rejects every write-capable tool. Runtime configuration fixes user, team, role, agent, and framework identity for the whole session; tool arguments can never impersonate a different configured agent."
+						]
+					},
+					{
+						"heading": "Resources and prompts",
+						"paragraphs": [
+							"Resources include project summaries, current context, decisions, tasks, skills, assets, conflicts, and direct entity, world, and memory reads, all enforcing configured scope. Prompts include longmemory_before_coding, longmemory_after_coding, longmemory_debug_session, longmemory_project_handoff, and longmemory_architecture_context. Retrieved memory always stays delimited as untrusted evidence, never interpolated as an instruction."
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "Deployment",
+		"items": [
+			{
+				"text": "Deployment Options",
+				"href": "deployment",
+				"data": [
+					{
+						"heading": "Deployment options",
+						"paragraphs": [
+							"Docker (Dockerfile): API and Streamable HTTP MCP. Docker Compose: API/MCP plus optional dashboard. Heroku (app.json), Railway (railway.json), Render (render.yaml), and DigitalOcean (.do/spec.yaml): containerized API/MCP. Vercel (vercel.json): dashboard only, needs a separately deployed API. Windows (start-longmemory.ps1): background local API/MCP process.",
+							"For any hosted API deployment: set LONGMEMORY_API_KEY, mount persistent storage at /data, and terminate TLS at the platform edge."
+						]
+					},
+					{
+						"heading": "Docker and Docker Compose",
+						"paragraphs": [
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "docker run --rm \\\n  -p 7331:7331 \\\n  -v longmemory-data:/data \\\n  -e LONGMEMORY_API_KEY=change-me \\\n  ghcr.io/caviraoss/longmemory:latest"
+							},
+							{
+								"type": "command",
+								"lang": "bash",
+								"data": "cp .env.example .env\ndocker compose up --build -d longmemory\n# add the dashboard too:\ndocker compose --profile ui up --build -d"
+							}
+						]
+					},
+					{
+						"heading": "Security notes for any networked deployment",
+						"paragraphs": [
+							"Protect API and MCP routes with LONGMEMORY_API_KEY. Restrict allowed origins and terminate TLS at the edge. Keep connector and embedding credentials outside repository files. Treat recalled content as untrusted evidence, not authorization. Preserve server-bound user, project, agent, and framework identity; tool and API arguments cannot override it."
+						]
+					}
+				]
 			}
 		]
 	}

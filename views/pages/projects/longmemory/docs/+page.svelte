@@ -59,7 +59,7 @@
 <div class="absolute w-screen h-screen z-50 pointer-events-none">
 	<Loader />
 </div>
-<div class="bg-black h-svh w-screen text-zinc-300 overflow-x-hidden relative flex font-funnel">
+<div class="bg-black min-h-svh w-screen text-zinc-300 overflow-x-hidden relative flex font-funnel">
 	<aside class="w-96 z-10 flex-shrink-0 border-r border-zinc-900 h-svh fixed top-0 left-0 flex flex-col justify-between">
 		<div class="w-full p-4 flex items-center border-b border-zinc-900 relative z-20">
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -115,7 +115,7 @@
 					{@html icons.get("arrowTop", "size-5 rotate-45 ml-auto")}
 				</a>
 			</div>
-			<p class="text-sm text-zinc-500 px-4">© 2026 LongMemory licensed under MIT.</p>
+			<p class="text-sm text-zinc-500 px-4">© 2026 LongMemory licensed under Apache License 2.0.</p>
 		</div>
 	</aside>
 	{#if details?.data}
@@ -137,7 +137,7 @@
 
 		<ThisPage data={details} />
 	{:else if details?.file}
-		<Page />
+		<Page onGetStarted={() => (activeLink = "0.1")} />
 	{:else}
 		<div class="my-auto ml-96 pl-20">
 			<h1 class="text-4xl text-zinc-200">404: Page Not Found</h1>

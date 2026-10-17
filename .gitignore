@@ -2,6 +2,7 @@ node_modules
 .svelte-kit
 .env
 package-lock.json
+build
 
 !.gitignore
 !.vscode
