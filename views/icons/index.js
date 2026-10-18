@@ -26,7 +26,7 @@ function get(icon, classes = "") {
             console.warn(`Icon "${icon}" not found.`);
             return "";
         }
-        baseSvg = rawSvg.replace(/\s(width|height)="[^"]*"/g, '').replace(/\s(fill|stroke)="#[^"]+"/g, ' $1="currentColor"');
+        baseSvg = rawSvg.replace(/<svg\b[^>]*>/i, tag => tag.replace(/\s(width|height)="[^"]*"/g, '')).replace(/\s(fill|stroke)="#[^"]+"/g, ' $1="currentColor"');
         svgCache.set(icon, baseSvg);
     }
 

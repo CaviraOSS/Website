@@ -7,6 +7,9 @@ const config = {
 		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
 	},
 	kit: {
+		version: {
+			name: process.env.CF_PAGES_COMMIT_SHA ?? process.env.GITHUB_SHA ?? 'cavira-local'
+		},
 		// https://svelte.dev/docs/kit/adapters
 		adapter: adapter({
 			pages: 'build',

@@ -34,6 +34,50 @@
 		return Math.min(100, Math.max(15, Math.round(trend + noise)));
 	});
 
+	let composerText = $state("");
+	let messages = $state([]);
+	let results = $state(null);
+	let busy = $state(false);
+	let failure = $state("");
+
+	const samples = [
+		{ label: "Priya's profile", text: "Hi, I'm Priya. I'm the backend lead on the payments team, please ping me on Slack instead of email." },
+		{ label: "An editor preference", text: "I prefer dark mode for the editor." },
+		{ label: "A preference update", text: "Actually, switch me to light mode. Dark mode strains my eyes at night." },
+	];
+
+	async function submitComposer() {
+		if (busy || !composerText.trim()) return;
+		const next = [...messages, { text: composerText.trim(), at: Math.max(Date.now(), (messages.at(-1)?.at ?? 0) + 1) }];
+		busy = true;
+		failure = "";
+		try {
+			const { compare } = await import("$lib/utils/memory-lab");
+			results = compare(next);
+			messages = next;
+			composerText = "";
+		} catch (error) {
+			failure = error instanceof Error ? error.message : "Local processing failed.";
+		} finally { busy = false; }
+	}
+
+	function fillSample(sample) {
+		composerText = sample.text;
+	}
+
+	function composer_key(event) {
+		if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+			event.preventDefault();
+			submitComposer();
+		}
+	}
+
+	function reset_conversation() {
+		messages = [];
+		results = null;
+		failure = "";
+	}
+
 	let container;
 	let animationFrameId;
 	let cleanupScene;
@@ -317,7 +361,7 @@
 		<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_50%,rgba(0,0,0,0.85)_70%)]"></div>
 
 		<div class="relative w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm">
-			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">01</span> / 04 ]</h1>
+			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">01</span> / 05 ]</h1>
 			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ hero ]</span>
 		</div>
 
@@ -339,7 +383,7 @@
 	</div>
 	<div class="max-w-7xl w-full h-full border border-stone-900 overflow-clip mt-10 bg-black">
 		<div class="w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm">
-			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">02</span> / 04 ]</h1>
+			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">02</span> / 05 ]</h1>
 			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ features ]</span>
 		</div>
 		<div class="w-full h-full grid grid-cols-3 grid-rows-2 gap-4">
@@ -461,7 +505,7 @@
 	</div>
 	<div class="max-w-7xl w-full h-full border border-stone-900 overflow-clip mt-10 bg-black grid grid-cols-3 gap-4">
 		<div class="w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm col-span-3">
-			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">03</span> / 04 ]</h1>
+			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">03</span> / 05 ]</h1>
 			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ lifecycle ]</span>
 		</div>
 		<div class="w-full h-full border-b border-stone-900 relative overflow-hidden col-span-3">
@@ -521,8 +565,99 @@
 		</div>
 	</div>
 	<div class="max-w-7xl w-full h-full border border-stone-900 overflow-clip mt-10 bg-black">
+		<div class="w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm">
+			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">04</span> / 05 ]</h1>
+			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ try it ]</span>
+		</div>
+		<div class="w-full py-12 px-4 sm:px-10">
+			<h1 class="text-2xl font-medium text-zinc-100 mb-2 mt-4">One conversation. Five memory architectures.</h1>
+			<p class="text-zinc-400 max-w-3xl">Local processing, portable source code, and architecture models. Your conversation stays in this browser.</p>
+			<p id="conversation-hint" class="mt-3 text-sm text-zinc-500 max-w-3xl">LongMemory's memory handling becomes clearer in longer chats. Keep the conversation going, revisit earlier topics, and change your preferences to see how it tracks context over time in this local demo.</p>
+			<div class="mt-6 space-y-3" role="log" aria-label="Memory conversation">
+				{#each messages as message, index}
+					<div class="flex justify-end"><div class="max-w-xl min-w-0 rounded-lg bg-zinc-100 text-black px-4 py-3 text-sm whitespace-pre-wrap break-words"><span class="block text-[10px] text-zinc-500 mb-1">m{index + 1}</span>{message.text}</div></div>
+				{/each}
+			</div>
+
+			<form onsubmit={(event) => { event.preventDefault(); submitComposer(); }} class="mt-8 border-t border-stone-900 pt-5">
+				<label for="compare-memory" class="sr-only">Message</label>
+				<textarea
+					id="compare-memory"
+					aria-describedby="conversation-hint"
+					bind:value={composerText}
+					onkeydown={composer_key}
+					rows="3" maxlength="4000" required disabled={busy}
+					placeholder="Tell your agent something to remember..."
+					class="w-full bg-stone-950 border border-stone-800 rounded-lg p-3 resize-y focus:border-zinc-500 outline-none text-zinc-100 placeholder:text-zinc-600 font-mono text-sm"
+				></textarea>
+				<div class="mt-3 flex items-center justify-between flex-wrap gap-3">
+					<div class="flex flex-wrap gap-2">
+						{#each samples as sample (sample.label)}
+							<button type="button" disabled={busy} onclick={() => fillSample(sample)} class="py-2 pr-4 text-xs text-zinc-400 hover:text-zinc-100 underline underline-offset-4 disabled:opacity-50">
+								{sample.label}
+							</button>
+						{/each}
+					</div>
+					<div class="flex items-center gap-3">
+						{#if messages.length}<button type="button" onclick={reset_conversation} disabled={busy} class="text-xs text-zinc-500 hover:text-zinc-200 disabled:opacity-40">Clear conversation</button>{/if}
+						<button type="submit" disabled={busy || !composerText.trim()} class="shrink-0 min-w-28 justify-center px-4 py-2 rounded-lg bg-zinc-100 hover:opacity-70 text-black text-sm font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-40">
+							<span>{busy ? "Processing..." : "Send"}</span>
+							{@html icons.get("chevronRight", "size-4")}
+						</button>
+					</div>
+				</div>
+			</form>
+			{#if failure}<p role="alert" class="mt-4 text-sm text-rose-400">{failure}</p>{/if}
+			{#if busy}<p role="status" class="mt-4 text-sm text-zinc-400">Loading local processing code...</p>{/if}
+		</div>
+
+		{#if results}
+			<div class="px-4 sm:px-10 pb-12 flex flex-col gap-4" aria-live="polite">
+				<div class="flex justify-between gap-4 flex-wrap text-xs text-zinc-500"><span>5 local paths / {messages.length} message{messages.length === 1 ? "" : "s"}</span><span>Sorted by local score; equal scores stay tied.</span></div>
+				{#each results as result (result.id)}
+					<div class="border border-stone-800 rounded-lg p-4 sm:p-5 bg-white/[0.01] min-w-0" data-backend={result.id}>
+						<div class="flex items-start justify-between gap-4 flex-wrap">
+							<div class="h-6 flex items-center gap-2 min-w-0" aria-label={result.name}>
+								{@html icons.get(result.logo, "h-full w-auto max-w-[130px] text-zinc-200")}
+								{#if result.id === "supermemory"}<span class="text-sm text-zinc-200">{result.name}</span>{/if}
+							</div>
+							<span class="text-xs text-zinc-400">{result.score === null ? "Not scored" : `${result.score}/100 local score`}</span>
+						</div>
+						<p class="mt-3 text-[11px] text-zinc-500">{result.basis}</p>
+						{#if result.score !== null}<div role="meter" aria-label={`${result.name} local score`} aria-valuenow={result.score} aria-valuemin="0" aria-valuemax="100" class="mt-3 h-1 w-full bg-stone-900 overflow-hidden"><div class="h-full bg-zinc-200" style:width={`${result.score}%`}></div></div>{/if}
+							<div class="mt-4 grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6">
+								<div class="min-w-0">
+									<p class="text-xs text-zinc-500 mb-2">Agent context</p>
+									<pre class="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap break-words font-mono mb-4">{result.context || "No supported facts extracted by this local path."}</pre>
+									<details class="text-xs text-zinc-500"><summary class="cursor-pointer hover:text-zinc-200">Memory representation</summary><pre class="mt-2 max-h-72 overflow-auto whitespace-pre-wrap break-words font-mono">{JSON.stringify(result.stored, null, 2)}</pre></details>
+									<a href={result.source} target="_blank" rel="noreferrer" class="inline-flex mt-4 text-xs text-zinc-500 hover:text-zinc-200 underline underline-offset-4">Source / architecture reference</a>
+								</div>
+								<div class="min-w-0">
+									<dl class="space-y-2 text-xs text-zinc-400">
+										<div class="flex justify-between gap-3"><dt>Agent readiness</dt><dd>{result.readiness === null ? "N/A" : `${result.readiness}/100`}</dd></div>
+										<div class="flex justify-between gap-3"><dt>Fact coverage</dt><dd>{result.metrics.coverage}%</dd></div>
+										<div class="flex justify-between gap-3"><dt>Source grounding</dt><dd>{result.metrics.grounding}%</dd></div>
+										<div class="flex justify-between gap-3"><dt>Freshness</dt><dd>{result.metrics.freshness === null ? "N/A" : `${result.metrics.freshness}%`}</dd></div>
+										<div class="flex justify-between gap-3"><dt>Structured facts</dt><dd>{result.metrics.structure}%</dd></div>
+										<div class="flex justify-between gap-3"><dt>Unique facts</dt><dd>{result.metrics.uniqueness}%</dd></div>
+										<div class="flex justify-between gap-3"><dt>Token efficiency</dt><dd>{result.efficiency}%</dd></div>
+										<div class="flex justify-between gap-3"><dt>Context tokens</dt><dd>{result.context_tokens}</dd></div>
+										<div class="flex justify-between gap-3"><dt>Stored JSON tokens</dt><dd>{result.stored_tokens}</dd></div>
+										<div class="flex justify-between gap-3"><dt>Cost / 1k recalls*</dt><dd>${result.cost_per_thousand.toFixed(4)}</dd></div>
+										<div class="flex justify-between gap-3"><dt>Current / historical facts</dt><dd>{result.active_records} / {result.historical_records}</dd></div>
+									</dl>
+								</div>
+							</div>
+					</div>
+				{/each}
+			</div>
+		{/if}
+
+		<details class="px-4 sm:px-10 pb-8 text-xs text-zinc-500 max-w-4xl"><summary class="cursor-pointer hover:text-zinc-200">Scoring and limitations</summary><p class="mt-3 leading-relaxed">Readiness = 35% value-based fact coverage + 15% source grounding + 20% freshness + 20% structure + 10% uniqueness. Coverage checks normalized values and explicit instead-of/rather-than restrictions, not filler wording. Unavailable dimensions are excluded. Local score = 80% readiness + 20% coverage-adjusted token efficiency. These English rule-based subsets are not full product benchmarks or semantic correctness judgments. Supermemory's private engine is not included; its path models public documentation. All paths use the same shared input analysis, with no brand bonuses.</p><p class="mt-3 leading-relaxed">Tokens use GPT-4o's tokenizer. *Cost models sending this context 1,000 times at a standardized $1 per million input tokens, not provider pricing, write/embedding costs, or a bill. Local processing makes no API calls.</p><a href="/memory-lab-notices.txt" target="_blank" rel="noreferrer" class="inline-block mt-3 underline underline-offset-4">Source and license notices</a></details>
+	</div>
+	<div class="max-w-7xl w-full h-full border border-stone-900 overflow-clip mt-10 bg-black">
 		<div class="w-full border-b border-stone-900 p-4 py-2 flex items-center justify-between text-sm col-span-3">
-			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">04</span> / 04 ]</h1>
+			<h1 class="font-mono w-28 border-r border-stone-800 text-stone-500">[ <span class="text-stone-200">05</span> / 05 ]</h1>
 			<span class="font-metrophobic w-28 text-right border-l border-stone-800 uppercase text-xs">[ get started ]</span>
 		</div>
 		<div class="w-full py-16 px-10">

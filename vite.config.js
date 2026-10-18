@@ -5,6 +5,6 @@ export default defineConfig({
     plugins: [sveltekit()],
     server: {
         hmr: { overlay: false },
-        host: '0.0.0.0'
+        host: '127.0.0.1'
     }
 });
