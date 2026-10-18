@@ -40,16 +40,16 @@
 		</div>
 
 		<div class="flex flex-col gap-6 text-6xl px-10 font-bricolage z-10 my-auto">
-			{#each ["Projects", "Contact", "About"] as item, i}
+			{#each [{"text": "Projects", "url": "#projects"}, {"text": "Contact", "url": "#footer"}, {"text": "About", "url": "#about"}] as item, i}
 				<div transition:fly={{ x: 50, duration: 400, delay: 150 + i * 70, easing: cubicOut }}>
-					<button class="text-left group text-zinc-400 hover:text-white transition-colors duration-300 flex items-center gap-4 overflow-hidden py-1">
+					<a href={item.url} class="text-left group text-zinc-400 hover:text-white transition-colors duration-300 flex items-center gap-4 overflow-hidden py-1">
 						<span class="text-lg font-mono text-stone-600 group-hover:text-stone-400 transition-colors">0{i + 1}</span>
 
 						<span class="relative overflow-hidden inline-block h-[1.10em]">
-							<span class="block transition-transform duration-300 ease-out group-hover:-translate-y-full">{item}</span>
-							<span class="block absolute top-0 left-0 transition-transform duration-300 ease-out translate-y-full group-hover:translate-y-0 text-white font-medium">{item}</span>
+							<span class="block transition-transform duration-300 ease-out group-hover:-translate-y-full">{item.text}</span>
+							<span class="block absolute top-0 left-0 transition-transform duration-300 ease-out translate-y-full group-hover:translate-y-0 text-white font-medium">{item.text}</span>
 						</span>
-					</button>
+					</a>
 				</div>
 			{/each}
 		</div>
@@ -60,9 +60,9 @@
 				<span class="text-zinc-400 uppercase">Family</span>
 			</div>
 
-			{#each ["OSS", "LABS", "TECH"] as link}
-				<a href="https://github.com/CaviraOSS/Longmemory" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5 group font-mono">
-					<span>{link}</span>
+			{#each [{"text": "OSS", "url": "https://github.com/CaviraOSS"}, {"text": "LABS", "url": "https://builtbybit.com/creators/cavira.551679/"}, {"text": "TECH", "url": "https://github.com/CaviraOSS"}] as link}
+				<a href={link.url} target={link.url.startsWith('http') ? '_blank' : '_self'} class="text-zinc-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5 group font-mono">
+					<span>{link.text}</span>
 					{@html icons.get("arrowTop", "size-4 rotate-45 text-stone-500 group-hover:text-white group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-200")}
 				</a>
 			{/each}
