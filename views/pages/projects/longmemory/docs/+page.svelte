@@ -1,11 +1,9 @@
 <script>
 	import { onMount } from "svelte";
 	import { page } from "$app/stores";
-	import Lenis from "lenis";
-	import "lenis/dist/lenis.css";
 	import Cursor from "$lib/includes/Cursor.svelte";
 	import icons from "$lib/icons/index.js";
-	import Loader from "$lib/includes/Loader.svelte";
+	//import Loader from "$lib/includes/Loader.svelte";
 	import ThisPage from "./ThisPage.svelte";
 	import DocsTemplate from "$lib/includes/DocsTemplate.svelte";
 
@@ -35,30 +33,12 @@
 			history.replaceState(null, "", url.toString());
 		}
 	});
-
-	$effect(() => {
-		const lenis = new Lenis({
-			autoRaf: true,
-			duration: 1.3,
-			easing: (t) => Math.min(1, 1.001 - Math.pow(1.8, -10 * t)),
-			orientation: "vertical",
-			gestureOrientation: "vertical",
-			smoothWheel: true,
-			wheelMultiplier: 1,
-			smoothTouch: false,
-			touchMultiplier: 2,
-		});
-
-		return () => {
-			lenis.destroy();
-		};
-	});
 </script>
 
 <Cursor />
-<div class="absolute w-screen h-screen z-50 pointer-events-none">
+<!-- <div class="absolute w-screen h-screen z-50 pointer-events-none">
 	<Loader />
-</div>
+</div> -->
 <div class="bg-black min-h-svh w-screen text-zinc-300 overflow-x-hidden relative flex font-funnel">
 	<aside class="w-96 z-10 flex-shrink-0 border-r border-zinc-900 h-svh fixed top-0 left-0 flex flex-col justify-between">
 		<div class="w-full p-4 flex items-center border-b border-zinc-900 relative z-20">
