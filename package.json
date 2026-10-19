@@ -7,6 +7,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"check:memory": "node tools/check-memory-lab.mjs",
+		"check:seo": "node tools/check-seo.mjs",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''"
 	},
@@ -20,6 +21,7 @@
 		"compromise": "^14.18.0",
 		"gpt-tokenizer": "^4.1.0",
 		"lenis": "^1.3.26",
+		"stemmer": "^2.0.1",
 		"three": "^0.185.1"
 	}
 }

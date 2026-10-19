@@ -333,10 +333,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Longmemory | OSS | Cavira</title>
-</svelte:head>
-
 <Cursor />
 <div class="bg-black min-h-svh w-screen text-neutral-300 overflow-clip relative p-4 sm:p-8 flex flex-col justify-center items-center font-funnel">
 	<div class="fixed z-30 w-full max-w-7xl p-4 bg-black/10 backdrop-blur-xl border border-stone-800 top-4 flex items-center justify-between">

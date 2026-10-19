@@ -112,10 +112,6 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Cavira</title>
-</svelte:head>
-
 <Cursor />
 <div class="bg-black min-h-svh w-screen text-neutral-300 overflow-clip relative hidden md:block">
 	<div class="absolute w-screen h-screen z-50 pointer-events-none">
@@ -227,7 +223,7 @@
 			<div class="h-[20vh] mx-10 w-px bg-white/20 rounded-full"></div>
 			<div class="w-96 h-[40vh] flex-shrink-0 flex flex-col justify-between py-10 px-4">
 				<div class="flex flex-col gap-1 -ml-4 w-full pr-8">
-					<a href="https://caivra.app/discord" target="_blank" class="w-full px-4 py-2 hover:bg-stone-900 rounded-full flex items-center">
+					<a href="https://cavira.app/discord" target="_blank" class="w-full px-4 py-2 hover:bg-stone-900 rounded-full flex items-center">
 						{@html icons.get("discord", "size-6")}
 						<span class="ml-2">Discord</span>
 						{@html icons.get("arrowTop", "size-5 rotate-45 ml-auto")}

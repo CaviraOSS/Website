@@ -82,6 +82,58 @@ it is a common hypothetical agent-input rate, not any provider's pricing or a
 claim about extraction, embedding, storage, or billed usage. No model is called.
 The conversation is bounded to 20 messages / 12,000 total characters.
 
+## Search And Crawlable Documentation
+
+The plain Search button opens a keyboard-accessible local documentation dialog.
+It indexes the same static documentation data used by the page, including code
+blocks and nested headings, and navigates to the original section. Search is
+read-only and local; it does not send queries to an API or store search history.
+
+`views/utils/docs-search.ts` reuses the token normalizer from LongMemory's
+`src/core/recall/recall_text.ts` and ports its BM25 candidate scorer from
+`src/core/recall/associative_recall.ts`. The document adapter uses local Unicode
+word tokens and weights section headings in the indexed text. This is the
+lexical recall component, not a hosted Hydrograph database, semantic embedding
+service, or generated-answer system. `npm run check:memory` validates retrieval,
+anchors, deterministic read-only searches, and normalizer source fidelity when
+the parent checkout is available. Ctrl/Cmd+K opens search; arrows select, Enter
+opens a section, and Escape closes the native dialog. Native dialog focus
+management keeps keyboard focus inside search and returns it on dismissal.
+
+## Site-Wide SEO And Agent References
+
+The shared layout renders unique titles, descriptions, canonical URLs, Open
+Graph/Twitter cards, and factual JSON-LD into the initial HTML. Production URLs
+use `https://cavira.app`, the domain already used by the site. Change the shared
+origin in `views/utils/site.ts` if the production domain changes.
+
+Documentation is prerendered from the same bundled catalog used by local search.
+Each guide has a readable URL, for example
+`/projects/longmemory/docs/installation`, and a `.md` version. Sidebar links work
+without JavaScript. Legacy `?pid=` links are normalized on hydration while
+preserving section anchors; new links and sitemap entries use the canonical paths.
+
+Build-time discovery routes emit ordinary static files:
+
+- `/robots.txt`: allows crawling and links the sitemap.
+- `/sitemap.xml`: canonical homepage, product, and documentation URLs.
+- `/llms.txt`: concise links and accurate source/limitation notes for agents.
+- `/llms-full.txt`: complete published documentation in plain text.
+- `/projects/longmemory/docs.md`: Markdown guide index.
+- `/projects/longmemory/docs/<guide>.md`: full guide text and code examples.
+
+There is no runtime search or inference API. The adapter emits `404.html` to
+prevent Cloudflare Pages' default homepage fallback on missing URLs. `_headers`
+declares text/Markdown/XML types for static discovery files. The build output is
+still `build/`; no Workers, database, credentials, or server deployment is needed.
+
+Run `npm run check:seo` for metadata, safe JSON-LD, complete sitemap, and Markdown
+consistency. `llms.txt` is an optional ecosystem convention, not a ranking signal
+guaranteed by every crawler. No hidden recommendation instructions, fabricated
+ratings, unverified pricing, or unsupported superiority claims are included.
+Search indexing, citations, and recommendations remain third-party decisions.
+After deployment, submit the canonical sitemap in search-engine webmaster tools.
+
 ## Advisories for developers
 
 1. Follow the code format from .vscode/settings.json, failure to do so might result in a sudden appearance of a certain rod from "Redo of the healer" in your rectum.

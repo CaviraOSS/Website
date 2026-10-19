@@ -6,11 +6,11 @@
 	let { onGetStarted = () => {} } = $props();
 </script>
 
-<div class="mx-96 flex flex-col p-12">
+<main id="docs-content" tabindex="-1" class="relative min-w-0 flex-1 md:ml-80 xl:mx-96 flex flex-col p-5 sm:p-8 lg:p-12 pt-20 md:pt-12 min-h-svh outline-none">
 	<img src="/assets/images/52.png" alt="" class="absolute w-auto h-svh top-0 z-0 opacity-80" />
 	<div class="absolute z-10 w-full h-svh top-0 bg-gradient-to-tr from-black via-black [mask-image:linear-gradient(to_top_right,black,transparent)] backdrop-blur-md"></div>
 	<div class="my-20 z-10">
-		<h1 class="text-2xl text-zinc-400">LongMemory</h1>
+		<p class="text-2xl text-zinc-400">LongMemory</p>
 		<h1 class="text-4xl mt-1 font-medium text-zinc-100">Documentation</h1>
 	</div>
 	<p class="z-10 max-w-xl my-auto text-xl">
@@ -25,6 +25,6 @@
 			{@html icons.get("chevronRight", "size-5 -ml-2 transition-all duration-300 w-1 group-hover:w-5 opacity-40")}
 		</button>
 	</div>
-</div>
+</main>
 
 <div class="fixed bottom-0 h-36 w-full pointer-events-none bg-gradient-to-t from-black z-0"></div>

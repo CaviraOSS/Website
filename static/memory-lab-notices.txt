@@ -6,6 +6,9 @@ This product includes software developed by CaviraOSS, nullure, and contributors
 https://github.com/CaviraOSS/LongMemory
 The claim extractor body is reused unchanged; the surrounding browser write
 model and scoring are separate implementations, not the complete engine.
+Documentation search additionally reuses the recall token normalizer and ports
+BM25 candidate scoring from src/core/recall/recall_text.ts and
+src/core/recall/associative_recall.ts, with a static-document input adapter.
 
 Mem0: TypeScript translations of parse_messages and normalize_facts.
 https://github.com/mem0ai/mem0/blob/main/mem0/memory/utils.py

@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync as read, existsSync as exists } from 'node:fs';
 import { fileURLToPath as path } from 'node:url';
+import { createRequire as create_require } from 'node:module';
+import vm from 'node:vm';
 import { createServer as create_server } from 'vite';
 
 const root = path(new URL('../', import.meta.url));
@@ -69,6 +71,7 @@ try {
         assert.deepEqual(unique_nodes([{ id: 'a', text: 'first' }, { id: 'a', text: 'later' }]), [{ id: 'a', text: 'first' }]);
     } finally { globalThis.fetch = original_fetch; }
     const { default: icons } = await server.ssrLoadModule('/views/icons/index.js');
+    assert.match(icons.get('discord'), /<\/svg>\s*$/);
     const cognee_logo = icons.get('cognee');
     assert.match(cognee_logo, /<rect\b[^>]*\bwidth="[^"]+"/);
     assert.match(cognee_logo, /<rect\b[^>]*\bheight="[^"]+"/);
@@ -84,5 +87,58 @@ try {
         const vendored = read(new URL('../views/utils/longmemory-claims.ts', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
         assert.equal(vendored.trim(), source.slice(source.indexOf('export type ClaimKind')).trim());
     }
-    console.log('PASS: five offline paths, source fidelity, prompt-sensitive neutral scoring, provenance, updates, tokenizer costs, limits, one chatbox, and no server route.');
+    assert.ok(exists(new URL('../views/utils/docs-search.ts', import.meta.url)), 'LongMemory documentation recall must be implemented');
+    const { create_docs_search, bm25_weighted, normalize_recall_token } = await server.ssrLoadModule('/views/utils/docs-search.ts');
+    const catalog = JSON.parse(read(new URL('../static/test.json', import.meta.url), 'utf8'));
+    const search = create_docs_search(catalog);
+    assert.ok(search.size > catalog.length);
+    assert.ok(search.recall('npm install longmemory').some(hit => hit.text.includes('npm install longmemory')));
+    assert.ok(search.recall('sqlite').some(hit => /sqlite/i.test(hit.heading + hit.text)));
+    assert.ok(search.recall('world grounded').some(hit => /world.grounded/i.test(hit.heading + hit.text)));
+    assert.deepEqual(search.recall('zzzxqvvnonsensezz'), []);
+    assert.deepEqual(search.recall('sqlite', 0), []);
+    assert.deepEqual(search.recall('sqlite'), search.recall('sqlite'));
+    for (const hit of search.recall('memory', 12)) {
+        assert.match(hit.pid, /^\d+\.\d+$/);
+        if (hit.anchor) assert.match(hit.anchor, /^section-\d+(?:-\d+)?$/);
+        assert.ok(hit.excerpt.length <= 190);
+    }
+    assert.ok(create_docs_search([]).recall('anything').length === 0);
+    assert.equal(normalize_recall_token('retrieving'), normalize_recall_token('retrieve'));
+    assert.deepEqual([...bm25_weighted(new Map([['sqlite', 1]]), [
+        { frequencies: new Map([['sqlite', 2]]), length: 10 },
+        { frequencies: new Map([['unrelated', 2]]), length: 10 },
+    ])], [1, 0]);
+    const normalizer = new URL('../../../src/core/recall/recall_text.ts', import.meta.url);
+    if (exists(normalizer)) {
+        const upstream = read(normalizer, 'utf8').replaceAll('\r\n', '\n');
+        const browser = read(new URL('../views/utils/docs-search.ts', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
+        assert.equal(browser.slice(browser.indexOf('export function normalize_recall_token'), browser.indexOf('\nconst recall_tokens')).trim(),
+            upstream.slice(upstream.indexOf('export function normalize_recall_token'), upstream.indexOf('\nfunction split_speaker')).trim());
+    }
+    const { compile, parse } = create_require(import.meta.url)('svelte/compiler');
+    const dialog_path = new URL('../views/components/DocsSearch.svelte', import.meta.url);
+    const dialog_source = read(dialog_path, 'utf8');
+    compile(dialog_source, { filename: path(dialog_path), generate: 'client' });
+    const controls = vm.createContext({
+        open: false, query: 'previous', active: 3, loading: true, error: 'loading',
+        input: { focus() {} },
+        dialog: { open: false, showModal() { this.open = true; }, close() { this.open = false; } },
+    });
+    vm.runInContext(parse(dialog_source).instance.content.body
+        .filter(node => ['show', 'close', 'shortcut', 'keydown'].includes(node.id?.name))
+        .map(node => dialog_source.slice(node.start, node.end)).join('\n'), controls);
+    controls.shortcut({ ctrlKey: true, metaKey: false, key: 'k', preventDefault() {} });
+    assert.equal(controls.dialog.open, true);
+    assert.equal(controls.query, '');
+    assert.equal(controls.active, 0);
+    await controls.keydown({ key: 'Escape', isComposing: false, preventDefault() {} });
+    assert.equal(controls.open, false);
+    assert.equal(controls.dialog.open, false);
+    controls.shortcut({ ctrlKey: false, metaKey: true, key: 'K', preventDefault() {} });
+    assert.equal(controls.dialog.open, true);
+    const preface = read(new URL('../views/pages/projects/longmemory/docs/First.svelte', import.meta.url), 'utf8');
+    assert.ok(preface.includes('id="docs-content"'));
+    assert.ok(preface.includes('tabindex="-1"'));
+    console.log('PASS: memory lab, local LongMemory documentation recall, dialog controls, and navigation targets.');
 } finally { await server.close(); }
