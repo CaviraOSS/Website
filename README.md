@@ -7,7 +7,7 @@ This website is not fully finished yet.
 ## Static Memory Lab
 
 The LongMemory page has one chatbox. Every message updates five local memory
-representations. There are no API routes, keys, Workers, databases, or external
+representations. The demo uses no API routes, keys, databases, or external
 inference calls. Conversations remain in page memory and clear on refresh.
 The processing module is lazy-loaded; its tokenizer data is bundled locally.
 
@@ -17,9 +17,12 @@ npm run check:memory
 npm run build
 ```
 
-Deploy `build/` to Cloudflare Pages. This website builds independently of the
-parent LongMemory repository. No comparison server or environment variables are
-required. `npm run dev` starts the local site.
+Deploy with `npm run deploy` to Cloudflare Workers with Static Assets. The small
+edge Worker only negotiates HTML/Markdown; the demo remains browser-only.
+This website builds independently of the parent LongMemory repository. No
+comparison server or environment variables are required. `npm run dev` starts
+the local Svelte site; use `npm run preview:edge` after building to test the
+Cloudflare behavior.
 The SvelteKit build ID uses `CF_PAGES_COMMIT_SHA` (or `GITHUB_SHA`, with a
 stable local fallback), keeping prerendered HTML and client hydration aligned
 across the build's separate stages.
@@ -121,11 +124,67 @@ Build-time discovery routes emit ordinary static files:
 - `/llms-full.txt`: complete published documentation in plain text.
 - `/projects/longmemory/docs.md`: Markdown guide index.
 - `/projects/longmemory/docs/<guide>.md`: full guide text and code examples.
+- `/.well-known/api-catalog`: RFC 9727 Linkset JSON describing the public
+  documentation API, served as `application/linkset+json`.
+- `/openapi.json`: OpenAPI 3.1 description of the existing read-only text and
+  Markdown documentation endpoints. It does not advertise a hosted memory API.
 
 There is no runtime search or inference API. The adapter emits `404.html` to
-prevent Cloudflare Pages' default homepage fallback on missing URLs. `_headers`
-declares text/Markdown/XML types for static discovery files. The build output is
-still `build/`; no Workers, database, credentials, or server deployment is needed.
+preserve real 404 responses on missing URLs. `_headers` declares discovery
+content types and homepage `Link` relations: `api-catalog`, `service-desc`,
+`service-doc`, and `describedby`. There is no health endpoint to advertise.
+
+### Markdown Content Negotiation
+
+The build leaves browser HTML untouched and creates agent-only Markdown assets
+under `build/_agent-markdown/`. Documentation reuses the existing `.md` sources;
+other pages are converted from their prerendered HTML with Turndown, stripping
+scripts, styles, decorative/loading elements, and navigation. CSS-layout word
+boundaries and absolute links are preserved. No model or runtime conversion
+service is called.
+
+`server/worker.ts` serves these representations at the original page URLs when
+`Accept: text/markdown` is explicitly requested with a nonzero quality at least
+as high as HTML. Browsers and wildcard-only requests still receive HTML.
+Negotiated pages return `Content-Type: text/markdown; charset=utf-8` and
+`Vary: Accept`; HTML page responses also vary on Accept to separate cache
+variants. GET and HEAD are supported, HTML validators are not reused for Markdown,
+and redirects, non-page assets, and missing-page status codes are preserved.
+
+`wrangler.toml` binds the static assets and runs the Worker before asset delivery.
+Uploading only `build/` to Pages, or running the Vite preview alone, **does not**
+enable negotiation. Use the Workers deployment configured here and attach
+`cavira.app` to that Worker in Cloudflare. Deployment requires your own Cloudflare
+authentication; no credentials belong in this repository. If using Cloudflare's
+zone-wide Markdown for Agents instead, choose one negotiation layer rather than
+converting these responses twice.
+
+```sh
+npm run check:agents
+npm run check:edge
+npm run build
+npm run preview:edge
+# In another terminal, exercise the real local Cloudflare asset binding:
+npm run check:agents -- http://127.0.0.1:8787
+# Publish using your authenticated Cloudflare account:
+npm run deploy
+```
+
+On Windows, stop the edge preview before rebuilding: its file watcher can lock
+the output directory while the static adapter replaces it.
+
+After deploying to the production domain, POST
+`{"url":"https://cavira.app"}` to `https://isitagentready.com/api/scan` with
+`Content-Type: application/json`. Check that
+`checks.discovery.apiCatalog.status`,
+`checks.discoverability.linkHeaders.status`, and
+`checks.contentAccessibility.markdownNegotiation.status` are all `"pass"`.
+The external scanner cannot validate unpublished local changes.
+
+OAuth discovery/protected-resource metadata, A2A agent cards, agent skill/MCP
+server cards, Web Bot Auth, WebMCP, and DNS-AID are not published: this site
+does not operate those services. The LongMemory MCP server documented here is
+self-hosted, not a public MCP endpoint on `cavira.app`.
 
 Run `npm run check:seo` for metadata, safe JSON-LD, complete sitemap, and Markdown
 consistency. `llms.txt` is an optional ecosystem convention, not a ranking signal

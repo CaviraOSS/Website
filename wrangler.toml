@@ -1,5 +1,9 @@
 name = "cavira"
+main = "server/worker.ts"
 compatibility_date = "2026-03-30"
 
 [assets]
 directory = "./build"
+binding = "assets"
+run_worker_first = true
+not_found_handling = "404-page"
