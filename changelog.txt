@@ -1,0 +1,11 @@
+0.1.0:
+	Homepage UI bug fixes.
+	Hide custom cursor on mobiles.
+	Remove unnecessary packages.
+	Fix broken loader on mobiles.
+
+0.1.1:
+	Longmemory page UI bug fixes.
+	Homepage mobile UI bug fixes.
+	Reduced logo.png's resolution to 128x128 from 4k
+	Added changelog.txt

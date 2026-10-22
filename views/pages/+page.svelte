@@ -204,13 +204,9 @@
 				</div>
 
 				{#each projects as project}
-					<svelte:element this={project.link ? "a" : "div"} href={project.link} class="grid grid-cols-1 sm:grid-cols-12 py-4 sm:py-3.5 items-start sm:items-center gap-2 sm:gap-0 group transition-colors {project.link ? 'hover:bg-neutral-950/80 cursor-pointer' : ''}">
-						<span class="font-mono text-xs text-neutral-500 sm:col-span-2 order-2 sm:order-1">
-							{project.year}
-						</span>
-
-						<div class="sm:col-span-5 order-1 sm:order-2 flex items-center gap-2">
-							<span class="text-lg sm:text-xl font-medium text-neutral-200 group-hover:text-white transition-colors">
+					<svelte:element this={project.link ? "a" : "div"} href={project.link} class="grid grid-cols-1 sm:grid-cols-12 py-3.5 sm:py-3.5 items-start sm:items-center gap-1 sm:gap-0 group transition-colors {project.link ? 'hover:bg-neutral-950/80 cursor-pointer' : ''}">
+						<div class="sm:col-span-5 sm:order-2 flex items-center gap-2">
+							<span class="text-base sm:text-xl font-medium text-neutral-200 group-hover:text-white transition-colors">
 								{project.name}
 							</span>
 							{#if project.link}
@@ -218,13 +214,23 @@
 							{/if}
 						</div>
 
-						<div class="sm:col-span-2 order-3">
+						<div class="sm:hidden text-xs font-mono text-neutral-500">
+							<span>{project.year}</span>,
+							<span>{project.division}</span>,
+							<span>{project.type}</span>
+						</div>
+
+						<span class="hidden sm:inline font-mono text-xs text-neutral-500 sm:col-span-2 sm:order-1">
+							{project.year}
+						</span>
+
+						<div class="hidden sm:block sm:col-span-2 sm:order-3">
 							<span class="inline-block text-[11px] font-mono px-2 py-0.5 border border-neutral-800 text-neutral-400">
 								{project.division}
 							</span>
 						</div>
 
-						<span class="font-mono text-xs text-neutral-500 sm:col-span-3 sm:text-right order-4">
+						<span class="hidden sm:inline font-mono text-xs text-neutral-500 sm:col-span-3 sm:text-right sm:order-4">
 							{project.type}
 						</span>
 					</svelte:element>
