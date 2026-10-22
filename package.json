@@ -1,7 +1,7 @@
 {
 	"name": "cavira",
 	"private": true,
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -9,9 +9,7 @@
 		"check:memory": "node tools/check-memory-lab.mjs",
 		"check:seo": "node tools/check-seo.mjs",
 		"check:agents": "node tools/check-agents.mjs",
-		"check:edge": "tsc --noEmit --strict --skipLibCheck --lib es2022,dom --target es2022 --module esnext --moduleResolution bundler server/worker.ts",
-		"preview:edge": "wrangler dev",
-		"deploy": "npm run build && wrangler deploy",
+		"deploy": "npm -v",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''"
 	},
@@ -20,8 +18,6 @@
 		"svelte": "^5.56.4",
 		"tailwindcss": "^4.3.2",
 		"turndown": "^7.2.0",
-		"typescript": "^5.9.3",
-		"wrangler": "^4.0.0",
 		"vite": "^8.1.3"
 	},
 	"dependencies": {

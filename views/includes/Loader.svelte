@@ -115,7 +115,7 @@
 		{/each}
 	</div>
 
-	<div bind:this={box} class="flex items-center justify-center duration-1000 transition-all translate-y-36">
+	<div bind:this={box} class="flex scale-[30%] md:scale-100 items-center justify-center duration-1000 transition-all translate-y-36">
 		<svg bind:this={logo} class="size-40 rotate-90 z-20 duration-1000 transition-all" viewBox="0 0 389 361" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
 				class="opacity-0"
@@ -155,5 +155,5 @@
 		</div>
 	</div>
 
-	<div bind:this={hider} class="absolute bg-[#060606] w-screen h-96 translate-y-64 z-30"></div>
+	<div bind:this={hider} class="absolute bg-[#060606] w-screen h-96 -mt-20 md:mt-0 translate-y-64 z-30"></div>
 </section>
