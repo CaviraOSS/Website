@@ -344,8 +344,9 @@
 		</nav>
 	</header>
 
-	<div class="relative w-full max-w-7xl flex flex-col justify-between border border-stone-900 bg-black/60 backdrop-blur-[1px] text-zinc-400 overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)] mt-16 sm:mt-20">
-		<div bind:this={container} class="pointer-events-none absolute inset-0 z-0 scale-125 sm:scale-150"></div>
+	<div
+		class="relative w-full max-w-7xl flex flex-col justify-between border border-stone-900 bg-black/60 backdrop-blur-[1px] text-zinc-400 overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)] mt-16 sm:mt-20 h-[calc(100svh-6rem)] sm:h-[calc(100svh-8rem)] md:h-[calc(100svh-6rem)] lg:h-[calc(100svh-10rem)]">
+		<div bind:this={container} class="pointer-events-none absolute inset-0 z-0 scale-150"></div>
 		<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.85)_75%)]"></div>
 
 		<div class="relative w-full border-b border-stone-900 px-4 py-2 flex items-center justify-between text-xs sm:text-sm z-10">
@@ -353,12 +354,12 @@
 			<span class="font-mono uppercase text-[11px] text-stone-500 tracking-wider">[ hero ]</span>
 		</div>
 
-		<main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-8 md:px-12 py-20 sm:py-28 md:py-36 lg:py-44 text-center">
-			<h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight text-white max-w-5xl leading-[1.12] text-balance">Durable, temporal, governed memory for AI agents.</h1>
-			<p class="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-300 max-w-3xl font-light leading-relaxed text-balance">
+		<main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-8 md:px-12 py-28 md:py-36 lg:py-44 pb-4 text-center">
+			<h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight text-white max-w-5xl leading-[1.12] text-left md:text-center text-balance">Durable, temporal, governed memory for AI agents.</h1>
+			<p class="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-300 max-w-3xl md:max-w-5xl font-light leading-relaxed text-left md:text-center md:text-balance">
 				Longmemory is a local-first, self-hosted memory engine for LLM applications — not just a vector store. It tracks what's true now, what used to be true, and why, across four distinct recall modes.
 			</p>
-			<div class="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full">
+			<div class="mt-auto md:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full">
 				<a href="./longmemory/docs" class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-white hover:bg-zinc-200 text-black text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 shadow-[0_0_25px_rgba(255,255,255,0.12)]">
 					<span>Initialize Memory</span>
 					{@html icons.get("chevronRight", "size-4")}
@@ -393,8 +394,8 @@
 						Every write lands as an immutable node with <span class="text-zinc-100">executable edges, worlds, and entities</span>, not a flat row in a vector index.
 					</p>
 				</div>
-				<img src="/assets/images/x1.png" alt="" class="object-cover w-full h-full absolute top-28 rotate-6 left-0 bottom-0 z-0 scale-105 pointer-events-none opacity-50 sm:opacity-90" />
-				<div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/20 to-transparent z-0 pointer-events-none"></div>
+				<img src="/assets/images/x1.png" alt="" class="object-cover w-full h-full absolute top-28 rotate-6 left-0 bottom-0 z-0 scale-105 pointer-events-none" />
+				<div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-transparent z-0 pointer-events-none"></div>
 			</div>
 
 			<div class="bg-black p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden lg:col-span-2">
@@ -491,8 +492,8 @@
 						Confidence decays on a deterministic schedule and <span class="text-zinc-100">strengthens on explicit reinforcement</span>, so memory never needs manual tuning.
 					</p>
 				</div>
-				<img src="/assets/images/52.png" alt="" class="object-cover w-full h-full object-top-left absolute top-28 left-0 ml-16 sm:ml-32 mt-20 sm:mt-36 bottom-0 z-0 scale-125 sm:scale-150 pointer-events-none opacity-50 sm:opacity-90" />
-				<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-0 pointer-events-none"></div>
+				<img src="/assets/images/52.png" alt="" class="object-cover w-full h-full object-top-left absolute top-28 left-0 ml-16 sm:ml-32 mt-20 sm:mt-36 bottom-0 z-0 scale-125 sm:scale-150 pointer-events-none" />
+				<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent z-0 pointer-events-none"></div>
 			</div>
 		</div>
 	</section>
@@ -515,7 +516,7 @@
 				<h2 class="text-xl sm:text-2xl font-medium text-zinc-100 mb-2 mt-6">Memory that ages the way your product needs it to</h2>
 				<p class="text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed">Confidence decays deterministically, reinforcement is explicit, and every change leaves a provenance trail back to its trigger.</p>
 			</div>
-			<div class="relative w-full h-48 sm:h-72 md:h-96 overflow-hidden">
+			<div class="relative w-full h-40 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
 				<img src="/assets/images/x5.png" alt="" class="object-cover object-top -mt-10 sm:-mt-20 w-full h-full z-0 skew-x-[15deg] sm:skew-x-[25deg] skew-y-[-6deg] sm:skew-y-[-10deg] rotate-6 opacity-75" />
 				<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none"></div>
 				<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80 z-10 pointer-events-none"></div>
@@ -882,18 +883,27 @@
 
 	<footer class="max-w-7xl w-full flex flex-col justify-between relative overflow-hidden mt-16 sm:mt-24 pb-8">
 		<div class="w-full grid grid-cols-1 sm:grid-cols-3 gap-8">
-			<div class="sm:col-span-2">
+			<div class="sm:col-span-2 px-2 md:px-0">
 				<h3 class="text-xl sm:text-2xl font-medium text-zinc-100">Longmemory</h3>
 				<p class="text-xs sm:text-sm text-zinc-400 mt-2">An open-source project licensed under the Apache License 2.0.</p>
 				<p class="text-xs sm:text-sm text-zinc-500 mt-1">&copy; 2026 Longmemory, CaviraOSS, and contributors.</p>
 			</div>
 
 			<div class="flex flex-col sm:items-end">
-				<span class="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3">Resources</span>
-				<nav class="flex flex-col gap-2 sm:items-end text-xs sm:text-sm">
-					<a href="./longmemory/docs" class="text-zinc-400 hover:text-white transition-colors">Documentation</a>
-					<a href="https://github.com/CaviraOSS/Longmemory" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors">GitHub</a>
-					<a href="https://cavira.app/discord" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors">Discord</a>
+				<span class="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3 hidden md:block">Resources</span>
+				<nav class="flex md:flex-col justify-between md:items-end gap-2 text-xs sm:text-sm px-2 md:px-0">
+					<a href="./longmemory/docs" class="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors">
+						<span>Docs</span>
+						{@html icons.get("chevronRight", "size-3.5 text-zinc-500")}
+					</a>
+					<a href="https://github.com/CaviraOSS/Longmemory" target="_blank" rel="noopener noreferrer" class="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors">
+						<span>GitHub</span>
+						{@html icons.get("arrowTop", "size-3.5 rotate-45 text-zinc-500")}
+					</a>
+					<a href="https://cavira.app/discord" target="_blank" rel="noopener noreferrer" class="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors">
+						<span>Discord</span>
+						{@html icons.get("arrowTop", "size-3.5 rotate-45 text-zinc-500")}
+					</a>
 				</nav>
 			</div>
 		</div>

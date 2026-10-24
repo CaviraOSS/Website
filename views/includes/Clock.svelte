@@ -70,7 +70,7 @@
 <div class="relative w-full max-w-3xl aspect-square mr-auto ml-0 flex items-center justify-start select-none overflow-hidden rounded-full bg-black lg:-ml-10">
 	<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center_left,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.02)_50%,transparent_80%)] pointer-events-none z-10"></div>
 	<div class="absolute inset-0 z-20 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.85)_85%,rgba(0,0,0,1)_100%)]"></div>
-	<div class="absolute top-1/2 left-[58%] right-10 h-8 -translate-y-1/2 bg-white/5 border border-white/10 rounded-xl z-30 pointer-events-none"></div>
+	<div class="absolute top-1/2 hidden md:block left-[58%] right-10 h-8 -translate-y-1/2 bg-white/5 border border-white/10 rounded-xl z-30 pointer-events-none"></div>
 
 	<svg viewBox="-400 -400 800 800" class="w-full h-full text-zinc-400">
 		<g class="fill-none">

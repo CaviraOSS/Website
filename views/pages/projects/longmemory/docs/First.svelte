@@ -6,24 +6,26 @@
 	let { onGetStarted = () => {} } = $props();
 </script>
 
-<main id="docs-content" tabindex="-1" class="relative min-w-0 flex-1 md:ml-80 xl:mx-96 flex flex-col p-5 sm:p-8 lg:p-12 pt-20 md:pt-12 min-h-svh outline-none">
-	<img src="/assets/images/52.png" alt="" class="absolute w-auto h-svh top-0 z-0 opacity-80" />
+<main id="docs-content" tabindex="-1" class="relative flex-1 md:ml-96 min-h-svh outline-none">
+	<img src="/assets/images/52.png" alt="" class="absolute w-full object-cover h-svh top-0 z-0 opacity-80" />
 	<div class="absolute z-10 w-full h-svh top-0 bg-gradient-to-tr from-black via-black [mask-image:linear-gradient(to_top_right,black,transparent)] backdrop-blur-md"></div>
-	<div class="my-20 z-10">
-		<p class="text-2xl text-zinc-400">LongMemory</p>
-		<h1 class="text-4xl mt-1 font-medium text-zinc-100">Documentation</h1>
-	</div>
-	<p class="z-10 max-w-xl my-auto text-xl">
-		Durable, temporal, governed memory for AI agents.<br/>
-		Start with Get Started → Introduction to see how the Hydrograph works.
-	</p>
-	<div class="mt-auto pb-20 z-10 text-xl">
-		<button onclick={onGetStarted} class="group flex items-center bg-white/5 border border-white/5 hover:bg-white/10 hover:text-white px-5 py-2 rounded-full duration-100 transition-all">
-			<span class="">Get started</span>
-			{@html icons.get("chevronRight", "size-5 ml-2 transition-all duration-300")}
-			{@html icons.get("chevronRight", "size-5 -ml-2 transition-all duration-300 w-1 group-hover:w-5 opacity-80")}
-			{@html icons.get("chevronRight", "size-5 -ml-2 transition-all duration-300 w-1 group-hover:w-5 opacity-40")}
-		</button>
+	<div class="relative z-20 flex flex-col justify-between h-full w-full px-4 md:px-12">
+		<div class="my-20 z-10">
+			<p class="text-2xl text-zinc-400">LongMemory</p>
+			<h1 class="text-4xl mt-1 font-medium text-zinc-100">Documentation</h1>
+		</div>
+		<p class="z-10 max-w-xl my-auto text-xl">
+			Durable, temporal, governed memory for AI agents.<br />
+			Start with Get Started → Introduction to see how the Hydrograph works.
+		</p>
+		<div class="mt-auto pb-20 z-10 text-xl">
+			<button onclick={onGetStarted} class="group flex items-center bg-white/5 border border-white/5 hover:bg-white/10 hover:text-white px-5 py-2 rounded-full duration-100 transition-all">
+				<span class="">Get started</span>
+				{@html icons.get("chevronRight", "size-5 ml-2 transition-all duration-300")}
+				{@html icons.get("chevronRight", "size-5 -ml-2 transition-all duration-300 w-1 group-hover:w-5 opacity-80")}
+				{@html icons.get("chevronRight", "size-5 -ml-2 transition-all duration-300 w-1 group-hover:w-5 opacity-40")}
+			</button>
+		</div>
 	</div>
 </main>
 

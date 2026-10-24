@@ -1,7 +1,7 @@
 {
 	"name": "cavira",
 	"private": true,
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -9,6 +9,7 @@
 		"check:memory": "node tools/check-memory-lab.mjs",
 		"check:seo": "node tools/check-seo.mjs",
 		"check:agents": "node tools/check-agents.mjs",
+		"check:all": "npm run check:memory && npm run check:seo && npm run check:agents",
 		"deploy": "npm -v",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''"

@@ -68,11 +68,11 @@
 	{#if nav_open}<button type="button" aria-label="Close documentation contents" onclick={() => (nav_open = false)} class="md:hidden fixed inset-0 z-30 bg-black/70"></button>{/if}
 	<aside class="w-80 xl:w-96 z-40 md:z-10 flex-shrink-0 border-r border-zinc-900 bg-black h-svh fixed top-0 left-0 flex-col justify-between {nav_open ? 'flex' : 'hidden md:flex'}">
 		<div class="w-full p-4 flex items-center border-b border-zinc-900 relative z-20">
-			<a href="/" aria-label="Cavira home"><img src="/assets/logo.png" alt="Cavira" class="size-12" /></a>
+			<a href="/" aria-label="Cavira home min-w-fit"><img src="/assets/logo.png" alt="Cavira" class="size-10 md:size-12" /></a>
 			<div class="w-px bg-zinc-800 h-6 ml-2 mr-4"></div>
 			<a href="/projects/longmemory/docs" class="flex flex-col -space-y-1">
-				<span class="text-zinc-400">LongMemory</span>
-				<span class="text-xl">Documentation</span>
+				<span class="text-zinc-400 text-xs md:text-sm">LongMemory</span>
+				<span class="text-lg md:text-xl">Documentation</span>
 			</a>
 			<button type="button" onclick={() => (search_open = true)} aria-label="Search documentation" aria-haspopup="dialog" aria-controls="longmemory-doc-search" title="Search documentation" class="p-2 flex items-center gap-2 bg-white/5 border border-white/5 hover:bg-white/10 ml-auto rounded-md">
 				{@html icons.get("search", "size-5")}
@@ -86,7 +86,7 @@
 				<div class="flex flex-col mb-4">
 					<button class="w-full px-4 py-2 rounded-full flex items-center focus:bg-stone-900 transition-all duration-300 {linkIdx === i ? 'bg-stone-900' : 'hover:bg-stone-900'}" onclick={() => (expanded[i] = !expanded[i])}>
 						<span class="text-lg text-zinc-400 font-medium">{i + 1}.</span>
-						<span class="ml-2">{link.label}</span>
+						<span class="ml-2 text-left">{link.label}</span>
 						{@html icons.get("chevronRight", "size-5 ml-auto transition-all duration-300 " + (expanded[i] ? "rotate-90" : ""))}
 					</button>
 
@@ -118,7 +118,7 @@
 					{@html icons.get("arrowTop", "size-5 rotate-45 ml-auto")}
 				</a>
 			</div>
-			<p class="text-sm text-zinc-500 px-4">© 2026 LongMemory licensed under Apache License 2.0.</p>
+			<p class="text-sm text-zinc-500 px-4">© 2026 LongMemory | Apache License 2.0.</p>
 		</div>
 	</aside>
 	{#if details?.data}

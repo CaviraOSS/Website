@@ -9,3 +9,6 @@
 	Homepage mobile UI bug fixes.
 	Reduced logo.png's resolution to 128x128 from 4k
 	Added changelog.txt
+
+0.1.2:
+	UI bug fixes.
