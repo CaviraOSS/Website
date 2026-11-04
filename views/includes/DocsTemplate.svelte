@@ -9,12 +9,12 @@
 		{#if typeof block === "string"}
 			<p class="mb-4 text-lg">{block}</p>
 		{:else if block?.data}
-			<div class="bg-black rounded-xl mb-4 p-1 overflow-x-auto border border-white/10">
+			<div class="bg-black rounded-xl mb-4 p-1 border border-white/10">
 				<div class="w-full flex items-center justify-between p-2 pt-1">
 					<span class="text-zinc-400 pl-1">{block.lang}</span>
 					<Copy data={block.data} />
 				</div>
-				<pre class="p-4 bg-white/5 shadow-lg border border-white/5 rounded-t-xl rounded-b-lg"><code class="font-metrophobic">{@html highlight(block.data, block.lang)}</code></pre>
+				<pre class="p-4 bg-white/5 shadow-lg border border-white/5 rounded-t-xl rounded-b-lg overflow-x-auto"><code class="font-metrophobic">{@html highlight(block.data, block.lang)}</code></pre>
 			</div>
 		{/if}
 	{/each}

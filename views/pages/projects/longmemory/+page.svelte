@@ -354,9 +354,9 @@
 			<span class="font-mono uppercase text-[11px] text-stone-500 tracking-wider">[ hero ]</span>
 		</div>
 
-		<main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-8 md:px-12 py-28 md:py-36 lg:py-44 pb-4 text-center">
-			<h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight text-white max-w-5xl leading-[1.12] text-left md:text-center text-balance">Durable, temporal, governed memory for AI agents.</h1>
-			<p class="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-300 max-w-3xl md:max-w-5xl font-light leading-relaxed text-left md:text-center md:text-balance">
+		<main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-8 md:px-12 py-28 md:pt-12 xl:pt-24 pb-4 text-center">
+			<h1 class="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-normal tracking-tight text-white max-w-5xl leading-[1.12] text-left md:text-center text-balance">Durable, temporal, governed memory for AI agents.</h1>
+			<p class="mt-5 sm:mt-6 text-sm sm:text-base md:text-md xl:text-xl text-zinc-300 max-w-3xl md:max-w-5xl font-light leading-relaxed text-left md:text-center md:text-balance">
 				Longmemory is a local-first, self-hosted memory engine for LLM applications — not just a vector store. It tracks what's true now, what used to be true, and why, across four distinct recall modes.
 			</p>
 			<div class="mt-auto md:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full">
@@ -505,7 +505,7 @@
 		</div>
 
 		<div class="w-full relative overflow-hidden border-b border-stone-900 bg-black">
-			<div class="p-6 sm:p-10 relative z-10">
+			<div class="p-6 sm:p-10 pb-0 sm:pb-0 relative z-10">
 				<div class="flex items-start justify-between">
 					{@html icons.get("layers", "size-6 sm:size-8 text-zinc-300")}
 					<div class="flex flex-col items-end font-mono text-xs text-zinc-500">
@@ -516,8 +516,8 @@
 				<h2 class="text-xl sm:text-2xl font-medium text-zinc-100 mb-2 mt-6">Memory that ages the way your product needs it to</h2>
 				<p class="text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed">Confidence decays deterministically, reinforcement is explicit, and every change leaves a provenance trail back to its trigger.</p>
 			</div>
-			<div class="relative w-full h-40 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-				<img src="/assets/images/x5.png" alt="" class="object-cover object-top -mt-10 sm:-mt-20 w-full h-full z-0 skew-x-[15deg] sm:skew-x-[25deg] skew-y-[-6deg] sm:skew-y-[-10deg] rotate-6 opacity-75" />
+			<div class="relative w-full h-40 sm:h-64 md:h-80 xl:h-96 overflow-hidden">
+				<img src="/assets/images/x5.png" alt="" class="object-cover object-top -mt-10 w-full sm:h-72 md:h-96 z-0 skew-x-[15deg] sm:skew-x-[25deg] skew-y-[-6deg] sm:skew-y-[-10deg] rotate-6 opacity-75" />
 				<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none"></div>
 				<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80 z-10 pointer-events-none"></div>
 			</div>
