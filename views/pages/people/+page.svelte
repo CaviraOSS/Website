@@ -53,7 +53,7 @@
 			},
 		},
 		{
-			name: "Morvel",
+			name: "Morven",
 			user: "nullure",
 			role: "Developer",
 			bio: "The everything guy.",
