@@ -2,7 +2,7 @@
 	<div class="max-w-6xl mx-auto flex flex-col gap-14">
 		<div class="space-y-4">
 			<span class="text-neutral-500 uppercase tracking-wider block">Get in touch</span>
-			<a href="mailto:hi@cavira.app" class="text-3xl sm:text-5xl md:text-6xl font-bricolage text-white hover:text-neutral-300 transition-colors inline-block break-all"> hi@cavira.app </a>
+			<a href="mailto:hi@cavira.app" class="text-3xl sm:text-5xl md:text-6xl font-funnel text-white hover:text-neutral-300 transition-colors inline-block break-all"> hi@cavira.app </a>
 		</div>
 
 		<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-8 border-t border-neutral-900 text-neutral-500">

@@ -143,7 +143,7 @@
 		</div>
 
 		<div class="relative z-10 my-auto py-12 md:py-16 max-w-5xl self-end text-right">
-			<h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bricolage font-normal tracking-tight text-white leading-[1.08] text-balance">
+			<h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-funnel font-normal tracking-tight text-white leading-[1.08] text-balance">
 				Building tools to push humanity toward the next
 				<span class="font-serif italic text-neutral-300">Era</span>
 			</h1>
@@ -158,7 +158,7 @@
 							{@html icons.get("arrowTop", "size-4 rotate-45 text-neutral-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all")}
 						</div>
 
-						<span class="text-xl sm:text-2xl font-bricolage text-neutral-200 group-hover:text-white transition-colors">
+						<span class="text-xl sm:text-2xl text-neutral-200 group-hover:text-white transition-colors">
 							{item.text}
 						</span>
 					</a>
@@ -168,8 +168,8 @@
 	</header>
 
 	<section id="statement" bind:this={textWrapper} class="relative bg-black w-full min-h-[160vh] md:min-h-[200vh]">
-		<div class="sticky top-0 min-h-screen flex flex-col justify-center items-center px-6 sm:px-12 md:px-16 py-12 max-w-5xl mx-auto">
-			<p class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-snug sm:leading-tight text-center flex flex-wrap justify-center gap-x-[0.25em] gap-y-[0.15em] select-none">
+		<div class="sticky top-0 min-h-screen flex flex-col justify-center items-center px-6 sm:px-12 md:px-16 py-12 max-w-5xl lg:max-w-6xl mx-auto">
+			<p class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-snug sm:leading-tight text-center flex flex-wrap justify-center gap-x-[0.25em] gap-y-[0.15em] select-none">
 				{#each words as word, i}
 					{@const wordStart = (i / words.length) * 0.75}
 					{@const wordEnd = wordStart + 0.25}
@@ -187,7 +187,7 @@
 		<div class="max-w-6xl mx-auto">
 			<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 border-b border-neutral-900">
 				<div>
-					<h2 class="text-2xl sm:text-3xl font-bricolage text-white">Projects Archive</h2>
+					<h2 class="text-2xl sm:text-3xl text-white">Projects Archive</h2>
 					<p class="text-sm text-neutral-500 mt-1">Open-source software, experimental tools, and production utilities.</p>
 				</div>
 				<span class="font-mono text-xs text-neutral-500">
@@ -243,7 +243,7 @@
 		<div class="max-w-6xl mx-auto flex flex-col gap-14">
 			<div class="space-y-4">
 				<span class="text-neutral-500 uppercase tracking-wider block">Get in touch</span>
-				<a href="mailto:hi@cavira.app" class="text-3xl sm:text-5xl md:text-6xl font-bricolage text-white hover:text-neutral-300 transition-colors inline-block break-all"> hi@cavira.app </a>
+				<a href="mailto:hi@cavira.app" class="text-3xl sm:text-5xl md:text-6xl text-white hover:text-neutral-300 transition-colors inline-block break-all"> hi@cavira.app </a>
 			</div>
 
 			<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-8 border-t border-neutral-900 text-neutral-500">

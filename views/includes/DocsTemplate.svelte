@@ -14,7 +14,7 @@
 					<span class="text-zinc-400 pl-1">{block.lang}</span>
 					<Copy data={block.data} />
 				</div>
-				<pre class="p-4 bg-white/5 shadow-lg border border-white/5 rounded-t-xl rounded-b-lg overflow-x-auto"><code class="font-metrophobic">{@html highlight(block.data, block.lang)}</code></pre>
+				<pre class="p-4 bg-white/5 shadow-lg border border-white/5 rounded-t-xl rounded-b-lg overflow-x-auto"><code class="">{@html highlight(block.data, block.lang)}</code></pre>
 			</div>
 		{/if}
 	{/each}
@@ -34,7 +34,7 @@
 								<span class="text-zinc-400 pl-1">{block.lang}</span>
 								<Copy data={block.data} />
 							</div>
-							<pre class="p-4 bg-white/5 shadow-lg border border-white/5 rounded-t-xl rounded-b-lg"><code class="font-metrophobic">{@html highlight(block.data, block.lang)}</code></pre>
+							<pre class="p-4 bg-white/5 shadow-lg border border-white/5 rounded-t-xl rounded-b-lg"><code class="">{@html highlight(block.data, block.lang)}</code></pre>
 						</div>
 					{/if}
 				{/each}

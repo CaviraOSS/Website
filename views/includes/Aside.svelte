@@ -32,14 +32,14 @@
 		<img src="/assets/logo.png" alt="logo" transition:fade={{ duration: 700, delay: 200 }} class="size-80 m-auto absolute top-1/2 -translate-y-1/2 right-4 opacity-10 pointer-events-none select-none blur-[1px]" />
 
 		<div class="w-full p-8 flex items-center justify-between z-10">
-			<h1 class="text-2xl font-bricolage tracking-wide text-zinc-100">Cavira</h1>
+			<h1 class="text-2xl tracking-wide text-zinc-100">Cavira</h1>
 			<button onclick={() => (menuOpen = false)} class="bg-stone-900 hover:bg-stone-800 border border-stone-800 rounded-full px-5 py-2 text-zinc-300 hover:text-white flex items-center gap-2 text-base transition-all duration-300 active:scale-95" aria-label="Close Menu">
 				{@html icons.get("cross", "size-5")}
 				<span>Close</span>
 			</button>
 		</div>
 
-		<div class="flex flex-col gap-6 text-6xl px-10 font-bricolage z-10 my-auto">
+		<div class="flex flex-col gap-6 text-6xl px-10 z-10 my-auto">
 			{#each [{"text": "Projects", "url": "#projects"}, {"text": "Contact", "url": "#footer"}, {"text": "About", "url": "#about"}] as item, i}
 				<div transition:fly={{ x: 50, duration: 400, delay: 150 + i * 70, easing: cubicOut }}>
 					<a href={item.url} class="text-left group text-zinc-400 hover:text-white transition-colors duration-300 flex items-center gap-4 overflow-hidden py-1">

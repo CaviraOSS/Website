@@ -104,7 +104,7 @@
 				{@const angle = 90 + i * (360 / 12)}
 				<g transform="rotate({angle}) translate(0, {-R_MONTH})">
 					<line y1="-10" y2="-14" class="stroke-white/20" stroke-width="1" />
-					<text transform="rotate({-(angle + monthAngle)})" text-anchor="middle" dominant-baseline="central" class="text-[12px] font-bricolage transition-colors duration-300 {i === monthIndex ? 'fill-white font-semibold scale-110 -rotate-90' : 'fill-zinc-600'}">
+					<text transform="rotate({-(angle + monthAngle)})" text-anchor="middle" dominant-baseline="central" class="text-[12px] transition-colors duration-300 {i === monthIndex ? 'fill-white font-semibold scale-110 -rotate-90' : 'fill-zinc-600'}">
 						{month}
 					</text>
 				</g>
@@ -116,7 +116,7 @@
 				{@const angle = 90 + i * (360 / 7)}
 				<g transform="rotate({angle}) translate(0, {-R_DAY})">
 					<line y1="-12" y2="-16" class="stroke-white/25" stroke-width="1" />
-					<text transform="rotate({-(angle + dayAngle)})" text-anchor="middle" dominant-baseline="central" class="text-[12px] font-bricolage transition-colors duration-300 {i === dayIndex ? 'fill-white font-bold' : 'fill-zinc-600'}">
+					<text transform="rotate({-(angle + dayAngle)})" text-anchor="middle" dominant-baseline="central" class="text-[12px] transition-colors duration-300 {i === dayIndex ? 'fill-white font-bold' : 'fill-zinc-600'}">
 						{day}
 					</text>
 				</g>
