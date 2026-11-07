@@ -1,25 +1,29 @@
 0.1.0:
 	Homepage UI bug fixes.
-	Hide custom cursor on mobiles.
+	Hide custom cursor on mobile devices.
 	Remove unnecessary packages.
-	Fix broken loader on mobiles.
+	Fix broken loader on mobile devices.
 
 0.1.1:
-	Longmemory page UI bug fixes.
+	Long Memory page UI bug fixes.
 	Homepage mobile UI bug fixes.
-	Reduced logo.png's resolution to 128x128 from 4k
-	Added changelog.txt
+	Reduce logo.png resolution from 4K to 128x128.
+	Add changelog.txt.
 
 0.1.2:
 	UI bug fixes.
 
 0.1.3:
-	Add peoples page.
-	Longmemory page & docs UI bug fixes.
-	Add aria label to footer roman text.
+	Add People page.
+	Long Memory page & docs UI bug fixes.
+	Add aria-label to footer Roman text.
 
 0.1.4:
 	Add people profile template.
 	Add dedicated draft profile pages.
 	Remove unnecessary fonts.
 	Bug fixes.
+
+0.1.5:
+	Remove dedicated draft pages and merge them into the template.
+	Build Tailwind CSS instead of using the CDN script.

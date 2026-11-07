@@ -1,11 +1,11 @@
 {
 	"name": "cavira",
 	"private": true,
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && node tools/build-agent-markdown.mjs",
+		"build": "tailwindcss -i ./static/assets/in.css -o ./static/assets/tailwind.css --minify && vite build && node tools/build-agent-markdown.mjs",
 		"check:memory": "node tools/check-memory-lab.mjs",
 		"check:seo": "node tools/check-seo.mjs",
 		"check:agents": "node tools/check-agents.mjs",
@@ -16,6 +16,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.10",
+		"@tailwindcss/cli": "^4.3.5",
 		"svelte": "^5.56.4",
 		"tailwindcss": "^4.3.2",
 		"turndown": "^7.2.0",
