@@ -4,6 +4,7 @@
 	import "lenis/dist/lenis.css";
 	import Cursor from "$lib/includes/Cursor.svelte";
 	import people from "../people";
+	import { formatStarCount, githubRepositoriesForProjects } from "../github";
 
 	const SPEED = 60;
 	const SNAP_FORWARD_THRESHOLD = 0.26;
@@ -14,6 +15,8 @@
 	let screenWidth = $state(1920);
 	let screenHeight = $state(1080);
 	let treeWidth = $state(500);
+	let projectStars = $state({});
+	const requestedRepositories = new Set();
 
 	let totalTreeDistance = $derived(screenWidth + treeWidth);
 	let groundCycleWidth = $derived(screenWidth * 2);
@@ -37,6 +40,27 @@
 	let mainPinY = $derived(scrollY < maxScroll ? scrollY - maxScroll : 0);
 
 	const person = $derived(people.find((p) => p.user === $page.params.user));
+	const repositories = $derived(githubRepositoriesForProjects(person?.projects));
+	const detailPanels = $derived((person?.details || []).filter((detail) => detail.text || detail.items?.length));
+	const skillGroups = $derived((person?.skillGroups || []).filter((group) => group.items?.length));
+
+	$effect(() => {
+		for (const repository of repositories) {
+			if (requestedRepositories.has(repository)) continue;
+			requestedRepositories.add(repository);
+
+			fetch(`https://api.github.com/repos/${repository}`, {
+				headers: { Accept: "application/vnd.github+json" },
+			})
+				.then((response) => (response.ok ? response.json() : null))
+				.then((data) => {
+					if (Number.isFinite(data?.stargazers_count)) {
+						projectStars[repository] = data.stargazers_count;
+					}
+				})
+				.catch(() => {});
+		}
+	});
 
 	$effect(() => {
 		const lenis = new Lenis({
@@ -190,6 +214,21 @@
 									{person.bio}
 								</p>
 							{/if}
+
+							{#if person.facts?.length}
+								<div class="flex flex-wrap gap-2 pt-3">
+									{#each person.facts as fact}
+										<span
+											class="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-zinc-950 px-3 py-1.5 text-xs text-zinc-300">
+											{#if fact.icon}
+												<span aria-hidden="true" class="text-zinc-500">{fact.icon}</span>
+											{/if}
+											<span class="sr-only">{fact.label}: </span>
+											<span>{fact.value}</span>
+										</span>
+									{/each}
+								</div>
+							{/if}
 						</div>
 					</div>
 
@@ -227,17 +266,63 @@
 						</div>
 					</div>
 
-					<div class="md:col-span-12 space-y-4">
+					<div class="md:col-span-12 space-y-5">
 						<h2 class="text-sm font-mono uppercase text-zinc-400">Tech Stack</h2>
-						<div class="flex flex-wrap gap-2">
-							{#each person.stack as stack}
-								<span class="px-3 py-1.5 rounded-md bg-zinc-900/70 border border-white/[0.07] text-sm font-medium text-zinc-200">
-									{stack}
-								</span>
-							{/each}
-						</div>
+						{#if skillGroups.length}
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+								{#each skillGroups as group}
+									<div class="space-y-3 border-l border-white/[0.08] pl-4">
+										<h3 class="text-sm font-medium text-zinc-300">{group.title}</h3>
+										<div class="flex flex-wrap gap-2">
+											{#each group.items as stack}
+												<span class="px-3 py-1.5 rounded-md bg-zinc-900/70 border border-white/[0.07] text-sm font-medium text-zinc-200">
+													{stack}
+												</span>
+											{/each}
+										</div>
+									</div>
+								{/each}
+							</div>
+						{:else}
+							<div class="flex flex-wrap gap-2">
+								{#each person.stack as stack}
+									<span class="px-3 py-1.5 rounded-md bg-zinc-900/70 border border-white/[0.07] text-sm font-medium text-zinc-200">
+										{stack}
+									</span>
+								{/each}
+							</div>
+						{/if}
+
+						{#if person.learning?.length}
+							<div class="flex flex-wrap items-center gap-2 pt-1">
+								<span class="text-xs font-mono uppercase tracking-wider text-zinc-500">Currently learning</span>
+								{#each person.learning as topic}
+									<span class="px-3 py-1.5 rounded-md border border-white/[0.1] bg-white/[0.03] text-sm text-zinc-300">{topic}</span>
+								{/each}
+							</div>
+						{/if}
 					</div>
 				</section>
+
+				{#if detailPanels.length}
+					<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+						{#each detailPanels as detail}
+							<article class="rounded-xl border border-white/[0.07] bg-zinc-950/70 p-5 space-y-3">
+								<h2 class="text-xs font-mono uppercase tracking-wider text-zinc-400">{detail.title}</h2>
+								{#if detail.text}
+									<p class="text-sm leading-relaxed text-zinc-300">{detail.text}</p>
+								{/if}
+								{#if detail.items?.length}
+									<div class="flex flex-wrap gap-2">
+										{#each detail.items as item}
+											<span class="rounded-md border border-white/[0.07] bg-white/[0.03] px-2.5 py-1 text-xs text-zinc-300">{item}</span>
+										{/each}
+									</div>
+								{/if}
+							</article>
+						{/each}
+					</section>
+				{/if}
 
 				<section class="space-y-6">
 					<div class="flex items-center justify-between">
@@ -247,6 +332,7 @@
 
 					<div class="divide-y divide-white/[0.06] border-y border-white/[0.06]">
 						{#each person.projects as project}
+							{@const repository = githubRepositoriesForProjects([project])[0]}
 							<a href={project.link} target="_blank" rel="noopener noreferrer" class="group py-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-8">
 								<div class="space-y-1">
 									<div class="flex items-center gap-3">
@@ -255,6 +341,13 @@
 										</h3>
 										<span class="text-sm text-zinc-400">•</span>
 										<span class="text-sm text-zinc-300">{project.tag}</span>
+										{#if repository && projectStars[repository] !== undefined}
+											<span class="inline-flex items-center gap-1 rounded-md border border-white/[0.1] bg-white/[0.03] px-2 py-0.5 text-xs font-mono text-zinc-300">
+												<span aria-hidden="true" class="text-amber-300">★</span>
+												<span class="sr-only">GitHub stars: </span>
+												{formatStarCount(projectStars[repository])}
+											</span>
+										{/if}
 									</div>
 									{#if project.description}
 										<p class="text-sm text-zinc-400 max-w-2xl leading-relaxed pt-1">

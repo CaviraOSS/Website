@@ -108,10 +108,36 @@ export default [
 			"github": "https://github.com/nullure",
 			"discord": "https://discord.com/users/838359128295342100"
 		},
+		facts: [
+			{ icon: "●", label: "Location", value: "In your closet" },
+			{ icon: "文", label: "Language", value: "English (Global)" },
+			{ icon: "文", label: "Language", value: "Hindi" },
+			{ icon: "文", label: "Language", value: "Dutch" },
+			{ icon: "◈", label: "Age", value: "17" },
+		],
+		details: [
+			{
+				title: "Now",
+				text: "Building open-source AI tools, developer experiences, and resilient infrastructure.",
+			},
+			{
+				title: "Focus",
+				items: ["AI systems", "Developer tools", "Infrastructure", "Cybersecurity"],
+			},
+			{
+				title: "Working style",
+				text: "Comfortable working end-to-end, from product interface through deployment and operations.",
+			},
+		],
 		"skills": [
 			"Developer",
+			"Software Architect",
+			"Systems Designer",
 			"Systems Administrator",
+			"Penetration Tester",
+			"Reverse Engineer",
 			"AI Engineer",
+			"Cybersecurity",
 		],
 		"stack": [
 			"JavaScript",
@@ -145,6 +171,25 @@ export default [
 			"Generative AI",
 			"Machine Learning"
 		],
+		skillGroups: [
+			{
+				title: "Programming languages",
+				items: ["JavaScript", "TypeScript", "Python", "Rust", "C#", "C++", "PHP", "HTML", "CSS", "Bash"],
+			},
+			{
+				title: "Frameworks & runtimes",
+				items: ["Node.js", "Next.js", "React", "Vue.js", "Express", "Tailwind CSS", "Bootstrap", "EJS"],
+			},
+			{
+				title: "Tools & infrastructure",
+				items: ["Docker", "Nginx", "Apache2", "MySQL", "MongoDB", "SQLite"],
+			},
+			{
+				title: "AI & machine learning",
+				items: ["LangChain", "LangGraph", "TensorFlow", "Ollama", "Generative AI", "Machine Learning"],
+			},
+		],
+		learning: ["Zig"],
 		"experience": [
 			"Building and maintaining production-ready full-stack applications",
 			"Designing REST APIs, authentication systems, and backend architectures",
@@ -177,6 +222,7 @@ export default [
 				"tag": "AI / Education",
 				"description": "Open-source education platform that transforms study materials into interactive quizzes, flashcards, notes, and podcasts using AI.",
 				"link": "https://github.com/caviraoss/pagelm",
+				"github": "CaviraOSS/PageLM",
 				"image": ""
 			},
 			{
@@ -184,6 +230,7 @@ export default [
 				"tag": "AI / Open Source",
 				"description": "Open-source AI memory solution designed to provide AI systems with fast, persistent long-term memory.",
 				"link": "https://cavira.app/projects/longmemory",
+				"github": "CaviraOSS/LongMemory",
 				"image": ""
 			},
 			{
@@ -191,6 +238,7 @@ export default [
 				"tag": "AI / Open Source",
 				"description": "Open-source project developed under Cavira OSS.",
 				"link": "https://github.com/caviraoss/akashic",
+				"github": "CaviraOSS/Akashic",
 				"image": ""
 			},
 			{
