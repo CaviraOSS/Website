@@ -109,10 +109,10 @@ export default [
 			"discord": "https://discord.com/users/838359128295342100"
 		},
 		facts: [
-			{ icon: "●", label: "Location", value: "In your closet" },
+			{ icon: "●", label: "Location", value: "127.0.0.1" },
 			{ icon: "文", label: "Language", value: "English (Global)" },
 			{ icon: "文", label: "Language", value: "Hindi" },
-			{ icon: "文", label: "Language", value: "Dutch" },
+			{ icon: "文", label: "Language", value: "French" },
 			{ icon: "◈", label: "Age", value: "17" },
 		],
 		details: [
